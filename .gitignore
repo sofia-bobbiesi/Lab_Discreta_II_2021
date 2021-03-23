@@ -49,5 +49,5 @@ Thumbs.db
 *.wmv
 .vscode/c_cpp_properties.json
 *.o
-*
+*.pdf
 *!.c
