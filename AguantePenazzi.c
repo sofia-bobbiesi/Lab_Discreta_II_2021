@@ -2,6 +2,7 @@
 #include <stdio.h>
 
 Grafo ConstruccionDelGrafo(){
+    
     return NULL;
 }
 
@@ -14,35 +15,42 @@ Grafo CopiarGrafo(Grafo G){
 }
 
 u32 NumeroDeVertices(Grafo G){
-    return NULL;
+    return G -> n_vertices;
 }
 
 u32 NumeroDeLados(Grafo G){
-    return NULL;
+    return G -> m_lados;
 }
 
 u32 Delta(Grafo G){
-    return NULL;
+    return G -> delta;
 }
 
 u32 Nombre(u32 i, Grafo G){
-    return NULL;
+    vertice v = G -> vertice_array[i];
+    return v -> nombre_real;
 }
 
 u32 Color(u32 i, Grafo G){
-    return NULL;
+    vertice v = G -> vertice_array[i];
+    return v -> color;
 }
 
 u32 Grado(u32 i, Grafo G){
-    return NULL;
+    vertice v = G -> vertice_array[i];
+    return v -> grado;
 }
 
 u32 ColorVecino(u32 j, u32 i, Grafo G){
-    return NULL;
+    vertice v_i = G -> vertice_array[i];
+    vertice v_j = v_i -> vecinos[j];
+    return v_j -> color;
 }
 
 u32 NombreVecino(u32 j, u32 i, Grafo G){
-    return NULL;
+    vertice v_i = G -> vertice_array[i];
+    vertice v_j = v_i -> vecinos[j];
+    return v_j -> nombre_real;
 }
 
 u32 OrdenVecino(u32 j, u32 i, Grafo G){
