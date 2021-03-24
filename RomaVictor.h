@@ -108,7 +108,7 @@ char FijarColor(u32 x, u32 i, Grafo G);
 char FijarOrden(u32 i, Grafo G, u32 N);
 /* 
     Si i y N son menores que el numero de vertices, fija que el vertice i 
-    en el orden guardado en G ser a el N-esimo vertice del orden “natural” 
+    en el orden guardado en G sera el N-esimo vertice del orden “natural” 
     (el que se obtiene al ordenar los vertices en orden creciente de sus 
     “nombres” reales) y retorna 0.  De lo contrario retorna 1.
 */
