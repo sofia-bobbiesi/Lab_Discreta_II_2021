@@ -6,10 +6,7 @@
 // Inicializar leyendo del archivo, lo que no se pueda va default :)
 // pedir el path???
 Grafo ConstruccionDelGrafo(){ // parametro *flie_path
-    vertice v_actual = NULL;
-    u32 grado_vertice = 0;
     Grafo grafito = malloc(sizeof(struct GrafoSt));
-    u32 cant_vertices = 0;
 
     FILE *file = fopen(file_path, "r"); //MESI CHIKITO Y ENOJADO
     if (file == NULL) {
@@ -17,21 +14,19 @@ Grafo ConstruccionDelGrafo(){ // parametro *flie_path
         exit(EXIT_FAILURE);
     }
 
-    cant_vertices = Entrada();
-    grafito->n_vertices = cant_vertices;
+    grafito->n_vertices = Entrada();
     grafito->m_lados = Entrada();
     grafito->delta = Entrada();
     /* Llenar lados */
     //FIXME PLZ :C
-    // NOTE: allocar el array de vertices?
-    for (u32 i = 0; cant_vertices < i; ++i){
-        grafito->vertice_array[i] = malloc(sizeof(struct _vertice_t));
-        grado_vertice = Entrada();
-        (grafito->vertice_array[i])->nombre_real = Entrada();
-        (grafito->vertice_array[i])->etiqueta = Entrada();
-        (grafito->vertice_array[i])->grado = grado_vertice;
-        (grafito->vertice_array[i])->color = Entrada();
-        (grafito->vertice_array[i])->vecinos[grado_vertice] = Entrada();
+    for (u32 i = 0; grafito->n_vertices > i; ++i){
+        vertice v_actual = malloc(sizeof(struct _vertice_t));
+        v_actual->nombre_real = Entrada();
+        v_actual->etiqueta = Entrada();
+        v_actual->grado = Entrada();
+        v_actual->color = Entrada();
+        v_actual->vecinos[v_actual->grado] = Entrada();
+        grafito->vertice_array[i] = v_actual;
         };
 
     fclose(file);
