@@ -47,7 +47,7 @@ Thumbs.db
 *.flv
 *.mov
 *.wmv
-.vscode/c_cpp_properties.json
+.vscode/*
 *.o
 *.pdf
 *!.c
