@@ -56,10 +56,7 @@ u32 Color(u32 i, Grafo G);
     Devuelve el color con el que esta coloreado el vertice numero i 
     en el orden guardado en ese momento en G. (el ındice 0 indica el 
     primer vertice, el ındice 1 el segundo, etc). Si i es mayor o
-    igual que el numero de v ́ertices, devuelve 2**32-1.(esto nunca
-    puede ser un color en los grafos que testeeemos,pues para que
-    eso fuese un color de algun vertice, el grafo deberia tener
-    al menos 232 vertices, lo cual lo harıa inmanejable).
+    igual que el numero de v ́ertices, devuelve 2**32-1.
 */
 
 u32 Grado(u32 i, Grafo G);
@@ -67,11 +64,7 @@ u32 Grado(u32 i, Grafo G);
     Devuelve el grado del vertice numero i en el orden guardado
     en ese momento en G. (el ındice 0 indica el primer vertice,
     el ındice 1 el segundo, etc). Si i es  mayor o igual  que
-    el numero de vertices, devuelve  2**32−1. (esto  nunca 
-    puede ser un grado en los grafos quetesteeemos, pues
-    para que eso fuese un grado de algun vertice, el grafo 
-    deberia tener al menos 2**32 vertices, lo cual lo haria
-    inmanejable).
+    el numero de vertices, devuelve  2**32−1.
 */
 
 /* Funciones para extraer informacion de los vecinos de un vertice */
@@ -87,10 +80,7 @@ u32 NombreVecino(u32 j, u32 i, Grafo G);
 /* 
     Devuelve el nombre del vecino numero j del vertice numero i en
     el orden guardado en ese momento en G. (el ındice 0 indica el
-    primer vertice, el ındice 1 el segundo, etc). Esta funcion no
-    tiene forma de reportar un error (que se producir ́ıa siies mayor
-    o igual que el n ́umero de vertices o j es mayor o igual que el 
-    numero de vecinos de i), asi que debe ser usada con cuidado.
+    primer vertice, el ındice 1 el segundo, etc).
 */
 u32 OrdenVecino(u32 j, u32 i, Grafo G);
 /* 
@@ -107,13 +97,12 @@ u32 PesoLadoConVecino(u32 j, u32 i, Grafo G);
 
 
 /* Funciones para modificar datos de los vertices */
+
 char FijarColor(u32 x, u32 i, Grafo G);
 /*
     Si i es menor que el numero de vertices, le asigna el color x al 
     vertice numero i en el orden guardado en ese momento en G y retorna 0.
-    De lo contrario, retorna 1. Esta funcion debe ser usada con cuidado 
-    pues puede provocar que queden colores no asignados a ningun 
-    vertice (pej, dando un coloreo con colores 0,1,4,7)8.2
+    De lo contrario, retorna 1. 
 */
 
 char FijarOrden(u32 i, Grafo G, u32 N);
