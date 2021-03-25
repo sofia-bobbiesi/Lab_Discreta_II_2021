@@ -7,29 +7,28 @@
 // pedir el path???
 Grafo ConstruccionDelGrafo(){ // parametro *flie_path
     Grafo grafito = malloc(sizeof(struct GrafoSt));
+    char* buffer,indict,*edge,*discard;
+    int number,curr_v,curr_s,last_v=0,index=0;
+    buffer = malloc(sizeof(char*)*255);
+    edge = malloc(sizeof(char*)*255);
+    discard = malloc(sizeof(char*)*255);
 
-    FILE *file = fopen(file_path, "r"); //MESI CHIKITO Y ENOJADO
-    if (file == NULL) {
-        fprintf(stderr, "File does not exist.\n");
-        exit(EXIT_FAILURE);
+    while((NULL!=fgets(buffer,255,stdin))&&(buffer[0]=='c'));
+    number = sscanf(buffer, "%c %s %u %d %s", &indict, edge, &grafito->n_vertices, &grafito->m_lados, discard);
+    if(((number!=4) || (indict!='p')) || (strcmp(edge,"edge"))){
+        return NULL;
     }
 
-    grafito->n_vertices = Entrada();
-    grafito->m_lados = Entrada();
-    grafito->delta = Entrada();
-    /* Llenar lados */
-    //FIXME PLZ :C
-    for (u32 i = 0; grafito->n_vertices > i; ++i){
-        vertice v_actual = malloc(sizeof(struct _vertice_t));
-        v_actual->nombre_real = Entrada();
-        v_actual->etiqueta = Entrada();
-        v_actual->grado = Entrada();
-        v_actual->color = Entrada();
-        v_actual->vecinos[v_actual->grado] = Entrada();
-        grafito->vertice_array[i] = v_actual;
-        };
-
-    fclose(file);
+    for(int i=0;i<grafito->m_lados;i++){
+        fgets(buffer,255,stdin);
+        sscanf(buffer,"%c %u %u", &indict,curr_v,curr_s);
+        if(curr_v!=last_v){
+            vertice v = malloc(sizeof(struct _vertice_t));
+            v->etiqueta = curr_v;
+            grafito->vertice_array[index] = curr_v;
+            last_v=curr_v;
+        }
+    }
     return grafito;
 }
 
