@@ -3,9 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-// Inicializar leyendo del archivo, lo que no se pueda va default :)
-// pedir el path???
-Grafo ConstruccionDelGrafo(){ // parametro *flie_path
+Grafo ConstruccionDelGrafo(){
     Grafo grafito = malloc(sizeof(struct GrafoSt));
     char* buffer,indict,*edge,*discard;
     int number,curr_v,curr_s,last_v=0,index=0;
@@ -18,14 +16,14 @@ Grafo ConstruccionDelGrafo(){ // parametro *flie_path
     if(((number!=4) || (indict!='p')) || (strcmp(edge,"edge"))){
         return NULL;
     }
-
-    for(int i=0;i<grafito->m_lados;i++){
+    // NOTE: cargar los vertices a medida que entran, si aparece un vecino se carga como vertice
+    for(int i = 0; i < grafito->m_lados; ++i){
         fgets(buffer,255,stdin);
         sscanf(buffer,"%c %u %u", &indict,curr_v,curr_s);
         if(curr_v!=last_v){
             vertice v = malloc(sizeof(struct _vertice_t));
-            v->etiqueta = curr_v;
-            grafito->vertice_array[index] = curr_v;
+            v->nombre_real = curr_v;
+            grafito->vertices[index] = curr_v;
             last_v=curr_v;
         }
     }
@@ -41,71 +39,70 @@ Grafo CopiarGrafo(Grafo G){
 }
 
 u32 NumeroDeVertices(Grafo G){
-    return G -> n_vertices;
+    return G->n_vertices;
 }
 
 u32 NumeroDeLados(Grafo G){
-    return G -> m_lados;
+    return G->m_lados;
 }
 
 u32 Delta(Grafo G){
-    return G -> delta;
+    return G->delta;
 }
 
 u32 Nombre(u32 i, Grafo G){
-    return (G->vertice_array[i])->nombre_real;
+    return G->vertices[i]->nombre_real;
 }
 
 u32 Color(u32 i, Grafo G){
-    return (G->vertice_array[i])->color;
+    return G->vertices[i]->color;
 }
-
 u32 Grado(u32 i, Grafo G){
-    return (G->vertice_array[i])->grado;
+    return G->vertices[i]->grado;
 }
 
 u32 ColorVecino(u32 j, u32 i, Grafo G){
-    return ((G->vertice_array[i])->vecinos[j])->color;
+    return G->vertices[i]->vecinos[j]->vertice_j->color;
 }
 
 u32 NombreVecino(u32 j, u32 i, Grafo G){
-    vertice v_i = G -> vertice_array[i];
-    vertice v_j = v_i -> vecinos[j];
-    return v_j -> nombre_real;
+    return G->vertices[i]->vecinos[j]->vertice_j->nombre_real;
 }
 
 u32 OrdenVecino(u32 j, u32 i, Grafo G){
-    return NULL;
+    u32 k = 0;
+    for (k; k < G->n_vertices; ++k){
+        if(G->vertices[i]->vecinos[j] == G->vertices[k]){
+            break;
+        }
+    }
+    return k;
 }
 
 u32 PesoLadoConVecino(u32 j, u32 i, Grafo G){
-    return ((G->vertice_array[i])->vecinos[j])->peso_u2v;
+    return G->vertices[i]->vecinos[j]->peso_u2v;
 }
 
-char FijarColor(u32 x, u32 i, Grafo G){    // NOTE: Seguro que es char pibe?
-    // NOTE: la numeración de vértices es desde 1
+char FijarColor(u32 x, u32 i, Grafo G){
+    // NOTE: la numeración de vértices es [0,..,n-1] ?
     if(i < G-> n_vertices){
-        (G->vertice_array[i-1])->color = x;
+        (G->vertices[i])->color = x;
         return 0;
     } 
     return 1;
 }
 
-char FijarOrden(u32 i, Grafo G, u32 N){    // NOTE: Seguro que es char pibe?
+char FijarOrden(u32 i, Grafo G, u32 N){
     if(i < G->n_vertices && N < G->n_vertices){
-        // NOTE: hay que reordernar?
+        // NOTE: tomar el vertice i, ordenar, insertar el
+        // vertice i en la posicion N, hacer swap? 
         return 0;
     }
     return 1;
 }
-/* 
-    Si i y N son menores que el numero de vertices, fija que el vertice i 
-    en el orden guardado en G sera el N-esimo vertice del orden “natural” 
-    (el que se obtiene al ordenar los vertices en orden creciente de sus 
-    “nombres” reales) y retorna 0.  De lo contrario retorna 1.
-*/
 
-u32 FijarPesoLadoConVecino(u32 j, u32 i, u32 p, Grafo G){ // NOTE: debería ser void pibe?
-    ((G->vertice_array[i])->vecino[j])->peso_u2v = p;
+u32 FijarPesoLadoConVecino(u32 j, u32 i, u32 p, Grafo G){ 
+    G->vertices[i]->vecinos[j]->peso_u2v = p;
+    // NOTE: debería retornar 2**32 - 1 como indice de que hubo un error ?
     return;
 }
