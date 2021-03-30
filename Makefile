@@ -1,8 +1,8 @@
-CFLAGS = -Wall -Wextra -O3 -std=c99 -I -fsanitize=address,undefined 
+CFLAGS = -Wall -Wextra -O3 -g -std=c99 -I -fsanitize=address,undefined 
 CC = gcc
 TARGET = discreta_2
 OBJS = $(SRCS:.c=.o)
-SRCS = parte_1.c
+SRCS = parte_1.c avl-tree.c
 
 all: 	$(OBJS) 
 	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS) 
@@ -16,6 +16,6 @@ clean:
 	$(RM) $(OBJS) *~ $(TARGET)
 
 valgrind:
-	valgrind --leak-check=full ./$(TARGET)
+	valgrind --leak-check=full --show-leak-kinds=all ./$(TARGET)
 
 
