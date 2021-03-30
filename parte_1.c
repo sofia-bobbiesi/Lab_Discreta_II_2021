@@ -43,12 +43,12 @@ vecinos crear_vecino(vertice lado){
 void agregar_vecino(vertice vertx, vertice lado){  
     assert(vertx->vecinos!=NULL);
     vertx->vecinos[vertx->grado] = crear_vecino(lado);
-    vertx->grado++; //aumento el grado por cada vecino que entra :)
+    vertx->grado++;
     vertx->vecinos = (vecinos*)realloc(vertx->vecinos, (vertx->grado)*sizeof(struct lado_t));
 }
 
 Grafo ConstruccionDelGrafo(){
-    Grafo grafo = calloc(1,sizeof(struct GrafoSt));
+    Grafo grafo = malloc(sizeof(struct GrafoSt));
     assert(grafo!=NULL);
     char buffer[255], discard[255], edge[255], indicador;
     u32 check=0, n=0, m=0, vertx=0, lado=0;
@@ -63,6 +63,7 @@ Grafo ConstruccionDelGrafo(){
     /* Si no falla, creo el grafo */
     grafo->n_vertices = n;
     grafo->m_lados = m;
+    grafo->delta = 0;
     grafo->vertices = malloc(sizeof(struct _vertice_t)*n);
     assert(grafo->vertices!=NULL);
 
@@ -104,7 +105,7 @@ void DestruccionDelGrafo(Grafo G){
         for(u32 i = 0; i<n && (G->vertices != NULL) ; ++i){
             if(G->vertices[i] != NULL){
                 u32 grado = G->vertices[i]->grado;
-                for(u32 j = 0; j<grado && (G->vertices[i]->vecinos != NULL) ; ++j){
+                for(u32 j = 0; j<grado && (G->vertices[i]->vecinos != NULL); ++j){
                     if(G->vertices[i]->vecinos[j] != NULL){
                         free(G->vertices[i]->vecinos[j]);
                         G->vertices[i]->vecinos[j] = NULL;
@@ -123,9 +124,29 @@ void DestruccionDelGrafo(Grafo G){
     }
 }
 
-// Grafo CopiarGrafo(Grafo G){
-//     return NULL;
-// }
+ Grafo CopiarGrafo(Grafo G){
+    Grafo grafo_copia = calloc(1,sizeof(struct GrafoSt));
+    assert(grafo_copia != NULL);
+    grafo_copia->n_vertices = G->n_vertices;
+    grafo_copia->m_lados = G->m_lados;
+    grafo_copia->delta = G->delta;
+    grafo_copia->vertices = malloc(sizeof(struct _vertice_t)*G->n_vertices);
+    assert(grafo_copia->vertices != NULL);
+
+    for (u32 i = 0u; i < G->n_vertices; ++i){
+        grafo_copia->vertices[i] = malloc(sizeof(struct _vertice_t));
+        grafo_copia->vertices[i]->color = G->vertices[i]->color;
+        grafo_copia->vertices[i]->grado = G->vertices[i]->grado;
+        grafo_copia->vertices[i]->nombre_real = G->vertices[i]->nombre_real;
+        grafo_copia->vertices[i]->vecinos = malloc(sizeof(struct lado_t)*G->vertices[i]->grado);
+        for(u32 j = 0; j < G->vertices[i]->grado; ++j){
+            grafo_copia->vertices[i]->vecinos[j] = malloc(sizeof(struct lado_t));
+            grafo_copia->vertices[i]->vecinos[j]->vertice_j = G->vertices[i]->vecinos[j]->vertice_j;
+            grafo_copia->vertices[i]->vecinos[j]->peso_u2v = G->vertices[i]->vecinos[j]->peso_u2v;
+        }
+    }
+    return grafo_copia;
+ }
 
 u32 NumeroDeVertices(Grafo G){
     return G->n_vertices;
@@ -210,8 +231,10 @@ u32 FijarPesoLadoConVecino(u32 j, u32 i, u32 p, Grafo G){
 
 
 int main(){
-    Grafo graph = ConstruccionDelGrafo();   
-    //imprimir_grafo(graph);
+    Grafo graph = ConstruccionDelGrafo();
+    Grafo copito = CopiarGrafo(graph);
+    imprimir_grafo(copito);
+    DestruccionDelGrafo(copito);
     DestruccionDelGrafo(graph);
     return 0;
 }
