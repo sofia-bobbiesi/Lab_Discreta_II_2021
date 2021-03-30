@@ -30,7 +30,7 @@ u32 max(u32 a, u32 b)
 
 static vertice crear_vertice(u32 nombre){
     vertice nuevo_vertice = malloc(sizeof(vertice));
-    assert(nuevo_vertice==NULL);
+    assert(nuevo_vertice!=NULL);
 
     nuevo_vertice->nombre_real = nombre;
     nuevo_vertice->color = 0;
@@ -97,17 +97,17 @@ u32 getBalance(Node N)
 	return height(N->left) - height(N->right);
 }
 
-
 // Recursive function to insert a key in the subtree rooted
 // with node and returns the new root of the subtree.
 Node insert(Node node, u32 key, Grafo G, u32 *position, u32 *pos_v)
 {
 	/* 1. Perform the normal BST insertion */
 	if (node == NULL){
-        vertice v = crear_vertice(key);
         Node new_node = newNode(key);
+        vertice v = crear_vertice(key);
         new_node->position = *position;
         G->vertices[*position] = v;
+        *pos_v = *position;
         *position += 1;
 		return new_node;
     }
