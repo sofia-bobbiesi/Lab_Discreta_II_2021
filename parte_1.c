@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <assert.h>
 #include "avl-tree.h"
+#include "sorting.h"
 
 static void imprimir_grafo(Grafo graph) {
     if (graph != NULL) {
@@ -124,7 +125,8 @@ void DestruccionDelGrafo(Grafo G){
     }
 }
 
- Grafo CopiarGrafo(Grafo G){
+
+Grafo CopiarGrafo(Grafo G){
     Grafo grafo_copia = calloc(1,sizeof(struct GrafoSt));
     assert(grafo_copia != NULL);
     grafo_copia->n_vertices = G->n_vertices;
@@ -214,8 +216,9 @@ char FijarColor(u32 x, u32 i, Grafo G){
 char FijarOrden(u32 i, Grafo G, u32 N){
     if(i < G->n_vertices && N < G->n_vertices){
         // NOTE: basta con ordenar el arreglo y recuperar la posición N.
-        // u32 vertice_natural[G->n_vertices] = ordenar(G->vertices);
-        //G->vertices[i] = vertices_natural[N];
+        Grafo G_copia = CopiarGrafo(G);
+        radix_sort(G_copia,G_copia->n_vertices);
+        G->vertices[i] = G_copia->vertices[N];
         return 0;
     }
     return 1;
