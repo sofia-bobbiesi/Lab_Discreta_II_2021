@@ -12,7 +12,7 @@ void radix_sort(Grafo G, u32 n) {
     vertice bucket[10][10];
     u32 bucket_cnt[10];
     u32 i, j, k, r, NOP = 0, divisor = 1, lar, pass;
-    lar = get_max(G->vertices, n);
+    lar = get_max(G->vertices_ordenados, n);
     while (lar > 0) {
         NOP++;
         lar /= 10;
@@ -22,21 +22,21 @@ void radix_sort(Grafo G, u32 n) {
             bucket_cnt[i] = 0;
         }
         for (i = 0; i < n; i++) {
-            r = (G->vertices[i]->nombre_real / divisor) % 10;
-            bucket[r][bucket_cnt[r]] = G->vertices[i]; 
+            r = (G->vertices_ordenados[i]->nombre_real / divisor) % 10;
+            bucket[r][bucket_cnt[r]] = G->vertices_ordenados[i]; 
             bucket_cnt[r] += 1;
         }
         i = 0;
         for (k = 0; k < 10; k++) {
             for (j = 0; j < bucket_cnt[k]; j++) {
-                G->vertices[i] = bucket[k][j];
+                G->vertices_ordenados[i] = bucket[k][j];
                 i++;
             }
         }
         divisor *= 10;
         printf("After pass %d : ", pass + 1);
         for (i = 0; i < n; i++)
-            printf("%d ", G->vertices[i]->nombre_real);
+            printf("%d ", G->vertices_ordenados[i]->nombre_real);
         printf("\n");
     }
 }

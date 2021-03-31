@@ -10,6 +10,7 @@ struct GrafoSt {
     u32 m_lados;
     u32 delta; // mayor grado del grafo ∆(G)
     vertice *vertices;
+    vertice *vertices_ordenados;
 };
 
 /*

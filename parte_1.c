@@ -29,6 +29,26 @@ static void imprimir_grafo(Grafo graph) {
                 printf("}\n\n");
             }
         }
+        printf("Ordenados\n");
+        for (u32 i = 0; i < graph->n_vertices; i++) {
+            vertice curr_vtx = graph->vertices_ordenados[i];
+            printf("Id: %d, Grado: %d, Color: %d\n", curr_vtx->nombre_real,
+                   curr_vtx->grado, curr_vtx->color);
+
+            if (curr_vtx->vecinos != NULL) {
+                printf("Vecinos: {");
+                for (u32 j = 0; j < curr_vtx->grado; j++) {
+                    vecinos curr_vecino = curr_vtx->vecinos[j];
+                    if (curr_vecino != NULL) {
+                        printf("%d", curr_vecino->vertice_j->nombre_real);
+                    }
+                    if (j != (curr_vtx->grado) - 1) {
+                        printf(", ");
+                    }
+                }
+                printf("}\n\n");
+            }
+        }
     }
 }
 
@@ -69,7 +89,8 @@ Grafo ConstruccionDelGrafo() {
     grafo->n_vertices = n;
     grafo->m_lados = m;
     grafo->delta = 0;
-    grafo->vertices = calloc(n,sizeof(struct _vertice_t));
+    grafo->vertices = calloc(n, sizeof(struct _vertice_t));
+    grafo->vertices_ordenados = calloc(n,sizeof(struct _vertice_t));
     assert(grafo->vertices != NULL);
 
     for (u32 i = 0u; (i < m) && (fgets(buffer, 255, stdin) != NULL); ++i) {
@@ -93,6 +114,7 @@ Grafo ConstruccionDelGrafo() {
 
         grafo->delta = max(grafo->delta, max(v1->grado, v2->grado));
     }
+    radix_sort(grafo,n);
     // Matar el avl, ya que no lo volvemos a usar
     deleteTree(avl);
     return grafo;
@@ -110,6 +132,7 @@ void DestruccionDelGrafo(Grafo G) {
         free(G->vertices[i]->vecinos);
         free(G->vertices[i]);
     }
+    free(G->vertices_ordenados);
     free(G->vertices);
     free(G);
 }
