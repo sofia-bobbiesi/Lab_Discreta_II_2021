@@ -15,7 +15,7 @@ static void imprimir_grafo(Grafo graph) {
             printf("Id: %d, Grado: %d, Color: %d\n", curr_vtx->nombre_real,
                    curr_vtx->grado, curr_vtx->color);
 
-            if (curr_vtx->vecinos != NULL) {
+/*             if (curr_vtx->vecinos != NULL) {
                 printf("Vecinos: {");
                 for (u32 j = 0; j < curr_vtx->grado; j++) {
                     vecinos curr_vecino = curr_vtx->vecinos[j];
@@ -27,7 +27,7 @@ static void imprimir_grafo(Grafo graph) {
                     }
                 }
                 printf("}\n\n");
-            }
+            } */
         }
         printf("Ordenados\n");
         for (u32 i = 0; i < graph->n_vertices; i++) {
@@ -35,7 +35,7 @@ static void imprimir_grafo(Grafo graph) {
             printf("Id: %d, Grado: %d, Color: %d\n", curr_vtx->nombre_real,
                    curr_vtx->grado, curr_vtx->color);
 
-            if (curr_vtx->vecinos != NULL) {
+/*             if (curr_vtx->vecinos != NULL) {
                 printf("Vecinos: {");
                 for (u32 j = 0; j < curr_vtx->grado; j++) {
                     vecinos curr_vecino = curr_vtx->vecinos[j];
@@ -47,7 +47,7 @@ static void imprimir_grafo(Grafo graph) {
                     }
                 }
                 printf("}\n\n");
-            }
+            } */
         }
     }
 }
@@ -114,7 +114,7 @@ Grafo ConstruccionDelGrafo() {
 
         grafo->delta = max(grafo->delta, max(v1->grado, v2->grado));
     }
-    radix_sort(grafo,n);
+    radix_sort(grafo->vertices_ordenados,n);
     // Matar el avl, ya que no lo volvemos a usar
     deleteTree(avl);
     return grafo;
@@ -238,10 +238,7 @@ char FijarColor(u32 x, u32 i, Grafo G) {
 char FijarOrden(u32 i, Grafo G, u32 N) {
     if (i < G->n_vertices && N < G->n_vertices) {
         // FIXME: porfa
-        // NOTE: basta con ordenar el arreglo y recuperar la posición N.
-        Grafo G_copia = CopiarGrafo(G);
-        radix_sort(G_copia, G_copia->n_vertices);
-        G->vertices[i] = G_copia->vertices[N];
+        G->vertices[i] = G->vertices_ordenados[N];
         return 0;
     }
     return 1;
@@ -257,9 +254,7 @@ u32 FijarPesoLadoConVecino(u32 j, u32 i, u32 p, Grafo G) {
 
 int main() {
     Grafo graph = ConstruccionDelGrafo();
-    Grafo copito = CopiarGrafo(graph);
-    imprimir_grafo(copito);
-    DestruccionDelGrafo(copito);
+    imprimir_grafo(graph);
     DestruccionDelGrafo(graph);
     return 0;
 }
