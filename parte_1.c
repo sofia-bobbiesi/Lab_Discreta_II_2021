@@ -1,5 +1,4 @@
 #include "avl-tree.h"
-#include "sorting.h"
 #include <assert.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -114,7 +113,8 @@ Grafo ConstruccionDelGrafo() {
 
         grafo->delta = max(grafo->delta, max(v1->grado, v2->grado));
     }
-    radix_sort(grafo->vertices_ordenados,n);
+    vertice *v_orden = grafo->vertices_ordenados;
+    avl_to_sorting_array(avl,grafo->vertices,&v_orden);
     // Matar el avl, ya que no lo volvemos a usar
     deleteTree(avl);
     return grafo;
@@ -214,8 +214,6 @@ u32 OrdenVecino(u32 j, u32 i, Grafo G) {
     u32 res = 0;
     for (u32 k = 0u; k < G->n_vertices; ++k) {
         if (G->vertices[i]->vecinos[j]->vertice_j->nombre_real == G->vertices[k]->nombre_real) {
-            printf("ola\n");
-            printf("tu vieja:%u\n",k);
             res = k;
             break;
         } 
