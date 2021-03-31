@@ -49,11 +49,10 @@ void agregar_vecino(vertice vertx, vertice lado) {
 }
 
 Grafo ConstruccionDelGrafo() {
-    Grafo grafo = malloc(sizeof(struct GrafoSt));
-    assert(grafo != NULL);
+    Grafo grafo = NULL;
     char buffer[255], discard[255], edge[255], indicador;
     u32 check = 0, n = 0, m = 0, vertx = 0, lado = 0, position = 0, pos_v = 0;
-    vertice v1, v2;
+    vertice v1 = NULL, v2 = NULL;
     Node avl = NULL; // creo el arbol
     // Avanza leyendo sobre las lineas que debe omitir ('c')
     while (fgets(buffer, 255, stdin) != NULL && buffer[0] == 'c')
@@ -65,6 +64,8 @@ Grafo ConstruccionDelGrafo() {
         exit(EXIT_FAILURE);
     }
     /* Si no falla, creo el grafo */
+    grafo = malloc(sizeof(struct GrafoSt));
+    assert(grafo != NULL);
     grafo->n_vertices = n;
     grafo->m_lados = m;
     grafo->delta = 0;
@@ -102,10 +103,8 @@ void DestruccionDelGrafo(Grafo G) {
     }
     for (u32 i = 0; i < (G->n_vertices) && (G->vertices[i] != NULL); i++) {
         u32 grado = (G->vertices[i]->grado);
-        for (u32 j = 0;
-             j < grado && (G->vertices[i]->vecinos != NULL);
-             j++) {
-                free(G->vertices[i]->vecinos[j]);
+        for (u32 j = 0; j < grado && (G->vertices[i]->vecinos != NULL); j++) {
+            free(G->vertices[i]->vecinos[j]);
         }
         free(G->vertices[i]->vecinos);
         free(G->vertices[i]);
