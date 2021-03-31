@@ -229,7 +229,7 @@ u32 FijarPesoLadoConVecino(u32 j, u32 i, u32 p, Grafo G) {
         return UINT32_MAX;
     }
     G->vertices[i]->vecinos[j]->peso_u2v = p;
-    return 1; // NOTE: qué retorna el caso exitoso?
+    return 0;
 }
 
 int main() {
