@@ -26,13 +26,11 @@ u32 max(u32 a, u32 b) {
 }
 
 static vertice crear_vertice(u32 nombre) {
-    vertice nuevo_vertice = malloc(sizeof(struct _vertice_t));
+    vertice nuevo_vertice = calloc(1,sizeof(struct _vertice_t));
     assert(nuevo_vertice != NULL);
 
     nuevo_vertice->nombre_real = nombre;
-    nuevo_vertice->color = 0;
-    nuevo_vertice->grado = 0;
-    nuevo_vertice->vecinos = malloc(sizeof(vecinos));
+    nuevo_vertice->vecinos = calloc(1,sizeof(vecinos));
 
     return nuevo_vertice;
 }

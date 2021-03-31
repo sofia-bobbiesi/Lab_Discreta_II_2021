@@ -33,7 +33,7 @@ static void imprimir_grafo(Grafo graph) {
 }
 
 vecinos crear_vecino(vertice lado) {
-    vecinos nuevo_vecino = malloc(sizeof(struct lado_t));
+    vecinos nuevo_vecino = calloc(1,sizeof(struct lado_t));
     assert(nuevo_vecino != NULL);
     nuevo_vecino->vertice_j = lado;
     nuevo_vecino->peso_u2v = 0;
@@ -69,7 +69,7 @@ Grafo ConstruccionDelGrafo() {
     grafo->n_vertices = n;
     grafo->m_lados = m;
     grafo->delta = 0;
-    grafo->vertices = malloc(sizeof(struct _vertice_t) * n);
+    grafo->vertices = calloc(n,sizeof(struct _vertice_t));
     assert(grafo->vertices != NULL);
 
     for (u32 i = 0u; (i < m) && (fgets(buffer, 255, stdin) != NULL); ++i) {
@@ -121,19 +121,19 @@ Grafo CopiarGrafo(Grafo G) {
     grafo_copia->n_vertices = G->n_vertices;
     grafo_copia->m_lados = G->m_lados;
     grafo_copia->delta = G->delta;
-    grafo_copia->vertices = malloc(sizeof(struct _vertice_t) * G->n_vertices);
+    grafo_copia->vertices = calloc(G->n_vertices,sizeof(struct _vertice_t));
     assert(grafo_copia->vertices != NULL);
 
     for (u32 i = 0u; i < G->n_vertices; ++i) {
-        grafo_copia->vertices[i] = malloc(sizeof(struct _vertice_t));
+        grafo_copia->vertices[i] = calloc(1,sizeof(struct _vertice_t));
         grafo_copia->vertices[i]->color = G->vertices[i]->color;
         grafo_copia->vertices[i]->grado = G->vertices[i]->grado;
         grafo_copia->vertices[i]->nombre_real = G->vertices[i]->nombre_real;
         grafo_copia->vertices[i]->vecinos =
-            malloc(sizeof(struct lado_t) * G->vertices[i]->grado);
+            calloc(G->vertices[i]->grado,sizeof(struct lado_t));
         for (u32 j = 0; j < G->vertices[i]->grado; ++j) {
             grafo_copia->vertices[i]->vecinos[j] =
-                malloc(sizeof(struct lado_t));
+                calloc(1,sizeof(struct lado_t));
             grafo_copia->vertices[i]->vecinos[j]->vertice_j =
                 G->vertices[i]->vecinos[j]->vertice_j;
             grafo_copia->vertices[i]->vecinos[j]->peso_u2v =
