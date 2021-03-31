@@ -97,29 +97,21 @@ Grafo ConstruccionDelGrafo() {
 }
 
 void DestruccionDelGrafo(Grafo G) {
-    if (G != NULL) {
-        u32 n = G->n_vertices;
-        for (u32 i = 0; i < n && (G->vertices != NULL); ++i) {
-            if (G->vertices[i] != NULL) {
-                u32 grado = G->vertices[i]->grado;
-                for (u32 j = 0; j < grado && (G->vertices[i]->vecinos != NULL);
-                     ++j) {
-                    if (G->vertices[i]->vecinos[j] != NULL) {
-                        free(G->vertices[i]->vecinos[j]);
-                        G->vertices[i]->vecinos[j] = NULL;
-                    }
-                }
-                free(G->vertices[i]->vecinos);
-                G->vertices[i]->vecinos = NULL;
-                free(G->vertices[i]);
-                G->vertices[i] = NULL;
-            }
-        }
-        free(G->vertices);
-        G->vertices = NULL;
-        free(G);
-        G = NULL;
+    if (G == NULL || G->vertices == NULL) {
+        exit(EXIT_FAILURE);
     }
+    for (u32 i = 0; i < (G->n_vertices) && (G->vertices[i] != NULL); i++) {
+        u32 grado = (G->vertices[i]->grado);
+        for (u32 j = 0;
+             j < grado && (G->vertices[i]->vecinos != NULL);
+             j++) {
+                free(G->vertices[i]->vecinos[j]);
+        }
+        free(G->vertices[i]->vecinos);
+        free(G->vertices[i]);
+    }
+    free(G->vertices);
+    free(G);
 }
 
 Grafo CopiarGrafo(Grafo G) {
