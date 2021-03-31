@@ -9,5 +9,4 @@ void radix_sort(Grafo G, u32 n);
 
 void mostrar(vertice *a, u32 n);
 
-
 #endif

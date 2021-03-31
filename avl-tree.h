@@ -13,7 +13,7 @@ u32 height(Node N);
 u32 max(u32 a, u32 b);
 
 /* Helper function that allocates a new node with the given key and
-	NULL left and right pou32ers. */
+        NULL left and right pou32ers. */
 Node newNode(u32 key);
 
 // A utility function to right rotate subtree rooted with y
@@ -29,7 +29,7 @@ u32 getBalance(Node N);
 
 // Recursive function to insert a key in the subtree rooted
 // with node and returns the new root of the subtree.
-Node insert(Node node, u32 key,Grafo G,u32 *position, u32 *pos_v);
+Node insert(Node node, u32 key, Grafo G, u32 *position, u32 *pos_v);
 
 //
 void deleteTree(Node avl);
