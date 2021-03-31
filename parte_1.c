@@ -8,11 +8,11 @@
 
 static void imprimir_grafo(Grafo graph) {
     if (graph != NULL) {
-        printf("Vertices: %d, Lados: %d\n", graph->n_vertices, graph->m_lados);
-        printf("Delta: %d\n", graph->delta);
+        printf("Vertices: %u, Lados: %u\n", graph->n_vertices, graph->m_lados);
+        printf("Delta: %u\n", graph->delta);
         for (u32 i = 0; i < graph->n_vertices; i++) {
             vertice curr_vtx = graph->vertices[i];
-            printf("Id: %d, Grado: %d, Color: %d\n", curr_vtx->nombre_real,
+            printf("Id: %u, Grado: %u, Color: %u\n", curr_vtx->nombre_real,
                    curr_vtx->grado, curr_vtx->color);
 
 /*             if (curr_vtx->vecinos != NULL) {
@@ -20,7 +20,7 @@ static void imprimir_grafo(Grafo graph) {
                 for (u32 j = 0; j < curr_vtx->grado; j++) {
                     vecinos curr_vecino = curr_vtx->vecinos[j];
                     if (curr_vecino != NULL) {
-                        printf("%d", curr_vecino->vertice_j->nombre_real);
+                        printf("%u", curr_vecino->vertice_j->nombre_real);
                     }
                     if (j != (curr_vtx->grado) - 1) {
                         printf(", ");
@@ -32,7 +32,7 @@ static void imprimir_grafo(Grafo graph) {
         printf("Ordenados\n");
         for (u32 i = 0; i < graph->n_vertices; i++) {
             vertice curr_vtx = graph->vertices_ordenados[i];
-            printf("Id: %d, Grado: %d, Color: %d\n", curr_vtx->nombre_real,
+            printf("Id: %u, Grado: %u, Color: %u\n", curr_vtx->nombre_real,
                    curr_vtx->grado, curr_vtx->color);
 
 /*             if (curr_vtx->vecinos != NULL) {
@@ -40,7 +40,7 @@ static void imprimir_grafo(Grafo graph) {
                 for (u32 j = 0; j < curr_vtx->grado; j++) {
                     vecinos curr_vecino = curr_vtx->vecinos[j];
                     if (curr_vecino != NULL) {
-                        printf("%d", curr_vecino->vertice_j->nombre_real);
+                        printf("%u", curr_vecino->vertice_j->nombre_real);
                     }
                     if (j != (curr_vtx->grado) - 1) {
                         printf(", ");
