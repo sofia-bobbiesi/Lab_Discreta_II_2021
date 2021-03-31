@@ -77,6 +77,8 @@ Grafo ConstruccionDelGrafo() {
             sscanf(buffer, "%c %u %u %s", &indicador, &vertx, &lado, discard);
         if (check != 3 || (indicador != 'e')) {
             fprintf(stderr, "\tERROR: Formato invalido.\n");
+            DestruccionDelGrafo(grafo);
+            deleteTree(avl);
             exit(EXIT_FAILURE);
         }
         // Si no falla, empiezo a cargar vertice y lado al arbol
