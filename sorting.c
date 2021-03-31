@@ -41,10 +41,3 @@ void radix_sort(Grafo G, u32 n) {
         printf("\n");
     }
 }
-
-void mostrar(vertice *a, u32 n) {
-    printf("Sorted items : ");
-    for (u32 i = 0; i < n; i++)
-        printf("%d ", a[i]->nombre_real);
-    printf("\n");
-}
