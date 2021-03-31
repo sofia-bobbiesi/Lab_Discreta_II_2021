@@ -9,8 +9,8 @@ u32 get_max(vertice *a, u32 n) {
     return max;
 }
 void radix_sort(Grafo G, u32 n) {
-    vertice bucket[10][10];
-    u32 bucket_cnt[10];
+    vertice bucket[256][256];
+    u32 bucket_cnt[256];
     u32 i, j, k, r, NOP = 0, divisor = 1, lar, pass;
     lar = get_max(G->vertices_ordenados, n);
     while (lar > 0) {
@@ -34,9 +34,5 @@ void radix_sort(Grafo G, u32 n) {
             }
         }
         divisor *= 10;
-        printf("After pass %d : ", pass + 1);
-        for (i = 0; i < n; i++)
-            printf("%d ", G->vertices_ordenados[i]->nombre_real);
-        printf("\n");
     }
 }
