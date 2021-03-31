@@ -63,7 +63,7 @@ Grafo ConstruccionDelGrafo() {
         fprintf(stderr, "\tERROR: Formato invalido.\n");
         exit(EXIT_FAILURE);
     }
-    /* Si no falla, creo el grafo */
+    // Si no falla, creo el grafo 
     grafo = malloc(sizeof(struct GrafoSt));
     assert(grafo != NULL);
     grafo->n_vertices = n;
@@ -84,14 +84,13 @@ Grafo ConstruccionDelGrafo() {
         // Si no falla, empiezo a cargar vertice y lado al arbol
         // No puedo crear el vertice antes de saber si está en el arbol.
         avl = insert(avl, vertx, grafo, &position, &pos_v); // cargo el vertice
-        v1 = grafo->vertices[pos_v]; // NOTE: si sale mal antes era puntero xd
+        v1 = grafo->vertices[pos_v];
         avl = insert(avl, lado, grafo, &position, &pos_v); // cargo el lado
         v2 = grafo->vertices[pos_v];
         // crear_vecino para v1 y v2 en agregar vecino
         agregar_vecino(v1, v2);
         agregar_vecino(v2, v1);
 
-        // defino el delta xdxd
         grafo->delta = max(grafo->delta, max(v1->grado, v2->grado));
     }
     // Matar el avl, ya que no lo volvemos a usar
@@ -116,6 +115,7 @@ void DestruccionDelGrafo(Grafo G) {
 }
 
 Grafo CopiarGrafo(Grafo G) {
+    // FIXME: la re vive con los vecinos
     Grafo grafo_copia = calloc(1, sizeof(struct GrafoSt));
     assert(grafo_copia != NULL);
     grafo_copia->n_vertices = G->n_vertices;
@@ -134,6 +134,7 @@ Grafo CopiarGrafo(Grafo G) {
         for (u32 j = 0; j < G->vertices[i]->grado; ++j) {
             grafo_copia->vertices[i]->vecinos[j] =
                 calloc(1,sizeof(struct lado_t));
+                // FIXME: en particular esta linea genera perturbaciones
             grafo_copia->vertices[i]->vecinos[j]->vertice_j =
                 G->vertices[i]->vecinos[j]->vertice_j;
             grafo_copia->vertices[i]->vecinos[j]->peso_u2v =
@@ -208,6 +209,7 @@ char FijarColor(u32 x, u32 i, Grafo G) {
 
 char FijarOrden(u32 i, Grafo G, u32 N) {
     if (i < G->n_vertices && N < G->n_vertices) {
+        // FIXME: porfa
         // NOTE: basta con ordenar el arreglo y recuperar la posición N.
         Grafo G_copia = CopiarGrafo(G);
         radix_sort(G_copia, G_copia->n_vertices);

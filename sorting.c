@@ -9,9 +9,10 @@ u32 get_max(vertice *a, u32 n) {
     return max;
 }
 void radix_sort(Grafo G, u32 n) {
+    // FIXME: reordena los nombres, no los vecinos :c
     u32 bucket[10][10], bucket_cnt[10];
     u32 i, j, k, r, NOP = 0, divisor = 1, lar, pass;
-    lar = get_max(G->vertices, n); // VO DECI?
+    lar = get_max(G->vertices, n);
     while (lar > 0) {
         NOP++;
         lar /= 10;
@@ -22,12 +23,13 @@ void radix_sort(Grafo G, u32 n) {
         }
         for (i = 0; i < n; i++) {
             r = (G->vertices[i]->nombre_real / divisor) % 10;
-            bucket[r][bucket_cnt[r]] = G->vertices[i]->nombre_real;
+            bucket[r][bucket_cnt[r]] = G->vertices[i]->nombre_real; // FIXME: posiblemente acá
             bucket_cnt[r] += 1;
         }
         i = 0;
         for (k = 0; k < 10; k++) {
             for (j = 0; j < bucket_cnt[k]; j++) {
+                // FIXME: y posiblemente acá 
                 G->vertices[i]->nombre_real = bucket[k][j];
                 i++;
             }
