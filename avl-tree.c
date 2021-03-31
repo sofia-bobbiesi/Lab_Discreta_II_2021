@@ -154,3 +154,12 @@ void deleteTree(Node avl) {
         avl = NULL; // evitar danling pointers
     }
 }
+
+void avl_to_sorting_array(Node root, vertice *v, vertice **v_orden) {
+    if(root != NULL) {
+        avl_to_sorting_array(root->left, v, v_orden);
+        **v_orden = v[root->position];
+        ++*v_orden;
+        avl_to_sorting_array(root->right, v, v_orden);
+    }
+}

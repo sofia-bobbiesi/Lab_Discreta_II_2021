@@ -34,4 +34,6 @@ Node insert(Node node, u32 key, Grafo G, u32 *position, u32 *pos_v);
 //
 void deleteTree(Node avl);
 
+void avl_to_sorting_array(Node root, vertice *v, vertice **v_orden);
+
 #endif
