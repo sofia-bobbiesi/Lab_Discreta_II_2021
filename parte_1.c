@@ -52,7 +52,9 @@ Grafo ConstruccionDelGrafo(){
     Grafo grafo = malloc(sizeof(struct GrafoSt));
     assert(grafo!=NULL);
     char buffer[255], discard[255], edge[255], indicador;
-    u32 check=0, n=0, m=0, vertx=0, lado=0;
+    u32 check=0, n=0, m=0, vertx=0, lado=0,position=0,pos_v=0;
+    vertice v1,v2;
+    Node avl = NULL; // creo el arbol
     // Avanza leyendo sobre las lineas que debe omitir ('c')
     while (fgets(buffer, 255, stdin) != NULL && buffer[0]=='c');
     //leo la primera linea con los datos del grafo
@@ -68,12 +70,6 @@ Grafo ConstruccionDelGrafo(){
     grafo->vertices = malloc(sizeof(struct _vertice_t)*n);
     assert(grafo->vertices!=NULL);
 
-    u32 p_array = 0; //aumenta cada vez que agrego un vertice nuevo
-    u32 p_de_v = 0;  //devuelve la posicion del vertice cargado
-    u32 *ptr_array = &p_array;
-    u32 *ptr_de_v = &p_de_v;
-    vertice v1,v2;
-    Node avl = NULL; // creo el arbol
     
     for (u32 i = 0u; (i < m) && (fgets(buffer, 255, stdin) != NULL); ++i) {
         check = sscanf(buffer, "%c %u %u %s", &indicador, &vertx, &lado, discard);
@@ -83,17 +79,16 @@ Grafo ConstruccionDelGrafo(){
         }
         // Si no falla, empiezo a cargar vertice y lado al arbol
         // No puedo crear el vertice antes de saber si está en el arbol.
-        avl = insert(avl,vertx,grafo,ptr_array,ptr_de_v); // cargo el vertice
-        v1 = grafo->vertices[*ptr_de_v]; //NOTE: si sale mal antes era puntero xd
-        avl = insert(avl,lado,grafo,ptr_array,ptr_de_v); // cargo el lado
-        v2 = grafo->vertices[*ptr_de_v];
+        avl = insert(avl,vertx,grafo,&position,&pos_v); // cargo el vertice
+        v1 = grafo->vertices[pos_v]; //NOTE: si sale mal antes era puntero xd
+        avl = insert(avl,lado,grafo,&position,&pos_v); // cargo el lado
+        v2 = grafo->vertices[pos_v];
         // crear_vecino para v1 y v2 en agregar vecino
         agregar_vecino(v1, v2);
         agregar_vecino(v2, v1);
 
         //defino el delta xdxd
-        grafo->delta = max(grafo->delta, v1->grado);
-        grafo->delta = max(grafo->delta, v2->grado);
+        grafo->delta = max(grafo->delta, max(v1->grado,v2->grado));
         }
     // Matar el avl, ya que no lo volvemos a usar
     deleteTree(avl);
