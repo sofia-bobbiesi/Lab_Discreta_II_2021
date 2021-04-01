@@ -28,13 +28,13 @@ static void imprimir_grafo(Grafo graph) {
                 printf("}\n\n");
             } */
         }
-        printf("Ordenados\n");
+/*         printf("Ordenados\n");
         for (u32 i = 0; i < graph->n_vertices; i++) {
             vertice curr_vtx = graph->vertices_ordenados[i];
             printf("Id: %u, Grado: %u, Color: %u\n", curr_vtx->nombre_real,
                    curr_vtx->grado, curr_vtx->color);
 
-/*             if (curr_vtx->vecinos != NULL) {
+            if (curr_vtx->vecinos != NULL) {
                 printf("Vecinos: {");
                 for (u32 j = 0; j < curr_vtx->grado; j++) {
                     vecinos curr_vecino = curr_vtx->vecinos[j];
@@ -46,8 +46,8 @@ static void imprimir_grafo(Grafo graph) {
                     }
                 }
                 printf("}\n\n");
-            } */
-        }
+            }
+        } */
     }
 }
 
@@ -235,8 +235,7 @@ char FijarColor(u32 x, u32 i, Grafo G) {
 
 char FijarOrden(u32 i, Grafo G, u32 N) {
     if (i < G->n_vertices && N < G->n_vertices) {
-        // FIXME: porfa
-        G->vertices[i] = G->vertices_ordenados[N];
+        G->vertices_ordenados[i] = G->vertices[N];
         return 0;
     }
     return 1;
@@ -252,6 +251,7 @@ u32 FijarPesoLadoConVecino(u32 j, u32 i, u32 p, Grafo G) {
 
 int main() {
     Grafo graph = ConstruccionDelGrafo();
+    FijarOrden(2,graph,3);
     imprimir_grafo(graph);
     DestruccionDelGrafo(graph);
     return 0;
