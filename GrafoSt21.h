@@ -19,6 +19,7 @@ struct GrafoSt {
 */
 struct lado_t {
     u32 peso_u2v;
+    u32 posicion;
     vertice vertice_j;
 };
 

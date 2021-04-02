@@ -59,9 +59,10 @@ vecinos crear_vecino(vertice lado) {
     return nuevo_vecino;
 }
 
-void agregar_vecino(vertice vertx, vertice lado) {
+void agregar_vecino(vertice vertx, vertice lado, u32 posicion) {
     assert(vertx->vecinos != NULL);
     vertx->vecinos[vertx->grado] = crear_vecino(lado);
+    vertx->vecinos[vertx->grado]->posicion = posicion;
     vertx->grado++;
     vertx->vecinos = (vecinos *)realloc(vertx->vecinos,
                                         (vertx->grado) * sizeof(struct lado_t));
@@ -70,7 +71,7 @@ void agregar_vecino(vertice vertx, vertice lado) {
 Grafo ConstruccionDelGrafo() {
     Grafo grafo = NULL;
     char buffer[255], discard[255], edge[255], indicador;
-    u32 check = 0, n = 0, m = 0, vertx = 0, lado = 0, position = 0, pos_v = 0;
+    u32 check = 0, n = 0, m = 0, vertx = 0, lado = 0, position = 0, pos_v = 0, pos_l = 0;
     vertice v1 = NULL, v2 = NULL;
     Node avl = NULL; // creo el arbol
     // Avanza leyendo sobre las lineas que debe omitir ('c')
@@ -105,11 +106,11 @@ Grafo ConstruccionDelGrafo() {
         // No puedo crear el vertice antes de saber si está en el arbol.
         avl = insert(avl, vertx, grafo, &position, &pos_v); // cargo el vertice
         v1 = grafo->vertices[pos_v];
-        avl = insert(avl, lado, grafo, &position, &pos_v); // cargo el lado
-        v2 = grafo->vertices[pos_v];
+        avl = insert(avl, lado, grafo, &position, &pos_l); // cargo el lado
+        v2 = grafo->vertices[pos_l];
         // crear_vecino para v1 y v2 en agregar vecino
-        agregar_vecino(v1, v2);
-        agregar_vecino(v2, v1);
+        agregar_vecino(v1, v2,pos_l);
+        agregar_vecino(v2, v1,pos_v);
 
         grafo->delta = max(grafo->delta, max(v1->grado, v2->grado));
     }
