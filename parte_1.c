@@ -139,7 +139,6 @@ void DestruccionDelGrafo(Grafo G) {
 }
 
 Grafo CopiarGrafo(Grafo G) {
-    // FIXME: la re vive con los vecinos
     Grafo grafo_copia = calloc(1, sizeof(struct GrafoSt));
     assert(grafo_copia != NULL);
     grafo_copia->n_vertices = G->n_vertices;
@@ -155,16 +154,21 @@ Grafo CopiarGrafo(Grafo G) {
         grafo_copia->vertices[i]->nombre_real = G->vertices[i]->nombre_real;
         grafo_copia->vertices[i]->vecinos =
             calloc(G->vertices[i]->grado,sizeof(struct lado_t));
-        for (u32 j = 0; j < G->vertices[i]->grado; ++j) {
+    }
+    for (u32 i = 0u; i < G->n_vertices; ++i)
+    {
+       for (u32 j = 0; j < G->vertices[i]->grado; ++j) {
             grafo_copia->vertices[i]->vecinos[j] =
                 calloc(1,sizeof(struct lado_t));
-                // FIXME: en particular esta linea genera perturbaciones
             grafo_copia->vertices[i]->vecinos[j]->vertice_j =
-                G->vertices[i]->vecinos[j]->vertice_j;
+                grafo_copia->vertices[G->vertices[i]->vecinos[j]->posicion];
+            grafo_copia->vertices[i]->vecinos[j]->posicion =
+            G->vertices[i]->vecinos[j]->posicion;
             grafo_copia->vertices[i]->vecinos[j]->peso_u2v =
                 G->vertices[i]->vecinos[j]->peso_u2v;
         }
     }
+    
     return grafo_copia;
 }
 
