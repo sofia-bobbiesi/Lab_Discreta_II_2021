@@ -145,30 +145,31 @@ Grafo CopiarGrafo(Grafo G) {
     grafo_copia->m_lados = G->m_lados;
     grafo_copia->delta = G->delta;
     grafo_copia->vertices = calloc(G->n_vertices,sizeof(struct _vertice_t));
+    grafo_copia->vertices_ordenados = 
+        calloc(G->n_vertices,sizeof(struct _vertice_t));
     assert(grafo_copia->vertices != NULL);
 
     for (u32 i = 0u; i < G->n_vertices; ++i) {
         grafo_copia->vertices[i] = calloc(1,sizeof(struct _vertice_t));
+        grafo_copia->vertices[i]->posicion = G->vertices[i]->posicion;
         grafo_copia->vertices[i]->color = G->vertices[i]->color;
         grafo_copia->vertices[i]->grado = G->vertices[i]->grado;
         grafo_copia->vertices[i]->nombre_real = G->vertices[i]->nombre_real;
         grafo_copia->vertices[i]->vecinos =
             calloc(G->vertices[i]->grado,sizeof(struct lado_t));
     }
-    for (u32 i = 0u; i < G->n_vertices; ++i)
-    {
+    for (u32 i = 0u; i < G->n_vertices; ++i){
        for (u32 j = 0; j < G->vertices[i]->grado; ++j) {
             grafo_copia->vertices[i]->vecinos[j] =
                 calloc(1,sizeof(struct lado_t));
             grafo_copia->vertices[i]->vecinos[j]->vertice_j =
-                grafo_copia->vertices[G->vertices[i]->vecinos[j]->posicion];
-            grafo_copia->vertices[i]->vecinos[j]->posicion =
-            G->vertices[i]->vecinos[j]->posicion;
+                grafo_copia->vertices[G->vertices[i]->vecinos[j]->vertice_j->posicion];
             grafo_copia->vertices[i]->vecinos[j]->peso_u2v =
                 G->vertices[i]->vecinos[j]->peso_u2v;
         }
+        grafo_copia->vertices_ordenados[i] = 
+            grafo_copia->vertices[G->vertices_ordenados[i]->posicion];
     }
-    
     return grafo_copia;
 }
 
