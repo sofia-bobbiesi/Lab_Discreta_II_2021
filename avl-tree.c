@@ -96,9 +96,8 @@ Node insert(Node node, u32 key, Grafo G, u32 *position, u32 *pos_v) {
         Node new_node = newNode(key);
         vertice v = crear_vertice(key);
         new_node->position = *position;
-        G->vertices[*position] = v;
         v->posicion = *position;
-        G->vertices_ordenados[*position] = v;
+        G->vertices[*position] = v;
         *pos_v = *position;
         *position += 1;
         return new_node;

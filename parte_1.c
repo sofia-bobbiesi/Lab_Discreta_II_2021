@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-static void imprimir_grafo(Grafo graph) {
+void imprimir_grafo(Grafo graph) {
     if (graph != NULL) {
         printf("Vertices: %u, Lados: %u\n", graph->n_vertices, graph->m_lados);
         printf("Delta: %u\n", graph->delta);
@@ -256,14 +256,14 @@ u32 FijarPesoLadoConVecino(u32 j, u32 i, u32 p, Grafo G) {
 
 int main() {
     Grafo graph = ConstruccionDelGrafo();
-    Grafo copito = CopiarGrafo(graph);
-    FijarOrden(2,graph,3);
-    //imprimir_grafo(grafo);
-    FijarColor(50,2,copito);
-    imprimir_grafo(copito);
-    printf("Orden vecino %u\n",OrdenVecino(2,0,copito));
-    printf("color vecino: %u\n:",ColorVecino(1,0,copito));
-    DestruccionDelGrafo(copito);
+    //Grafo copito = CopiarGrafo(graph);
+    //FijarOrden(2,graph,3);
+    imprimir_grafo(graph);
+    //FijarColor(50,2,copito);
+    //imprimir_grafo(copito);
+    // printf("Orden vecino %u\n",OrdenVecino(2,0,graph));
+    // printf("color vecino: %u\n",ColorVecino(1,0,graph));
+    //DestruccionDelGrafo(copito);
     DestruccionDelGrafo(graph);
     return 0;
 }

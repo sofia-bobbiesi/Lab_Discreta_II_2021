@@ -4,6 +4,10 @@
 #include "GrafoSt21.h"
 typedef struct GrafoSt *Grafo;
 
+/* Funciones extra para el manejo de grafos */
+
+void imprimir_grafo(Grafo graph);
+
 /* Funciones De Construccion/Destruccion/Copia del grafo */
 
 Grafo ConstruccionDelGrafo();
