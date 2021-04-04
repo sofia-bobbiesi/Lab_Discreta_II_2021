@@ -217,14 +217,7 @@ u32 OrdenVecino(u32 j, u32 i, Grafo G) {
     if ((i >= G->n_vertices)) {
         return UINT32_MAX;
     }
-    u32 res = 0;
-    for (u32 k = 0u; k < G->n_vertices; ++k) {
-        if (G->vertices[i]->vecinos[j]->vertice_j->nombre_real == G->vertices[k]->nombre_real) {
-            res = k;
-            break;
-        } 
-    }
-    return res;
+    return G->vertices[i]->vecinos[j]->vertice_j->posicion;
 }
 
 u32 PesoLadoConVecino(u32 j, u32 i, Grafo G) {
