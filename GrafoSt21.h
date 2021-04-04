@@ -19,7 +19,6 @@ struct GrafoSt {
 */
 struct lado_t {
     u32 peso_u2v;
-    u32 posicion;
     vertice vertice_j;
 };
 
@@ -30,6 +29,7 @@ struct lado_t {
 struct _vertice_t {
     u32 nombre_real;
     u32 grado; // numero de vecinos
+    u32 posicion;
     u32 color;
     vecinos *vecinos;
 };

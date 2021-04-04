@@ -14,7 +14,7 @@ static void imprimir_grafo(Grafo graph) {
             printf("Id: %u, Grado: %u, Color: %u\n", curr_vtx->nombre_real,
                    curr_vtx->grado, curr_vtx->color);
 
-/*             if (curr_vtx->vecinos != NULL) {
+            if (curr_vtx->vecinos != NULL) {
                 printf("Vecinos: {");
                 for (u32 j = 0; j < curr_vtx->grado; j++) {
                     vecinos curr_vecino = curr_vtx->vecinos[j];
@@ -59,13 +59,13 @@ vecinos crear_vecino(vertice lado) {
     return nuevo_vecino;
 }
 
-void agregar_vecino(vertice vertx, vertice lado, u32 posicion) {
+void agregar_vecino(vertice vertx, vertice lado) {
     assert(vertx->vecinos != NULL);
     vertx->vecinos[vertx->grado] = crear_vecino(lado);
-    vertx->vecinos[vertx->grado]->posicion = posicion;
+    //vertx->vecinos[vertx->grado]->posicion = posicion;
     vertx->grado++;
     vertx->vecinos = (vecinos *)realloc(vertx->vecinos,
-                                        (vertx->grado) * sizeof(struct lado_t));
+                                    (vertx->grado) * sizeof(struct lado_t));
 }
 
 Grafo ConstruccionDelGrafo() {
@@ -109,8 +109,8 @@ Grafo ConstruccionDelGrafo() {
         avl = insert(avl, lado, grafo, &position, &pos_l); // cargo el lado
         v2 = grafo->vertices[pos_l];
         // crear_vecino para v1 y v2 en agregar vecino
-        agregar_vecino(v1, v2,pos_l);
-        agregar_vecino(v2, v1,pos_v);
+        agregar_vecino(v1, v2);
+        agregar_vecino(v2, v1);
 
         grafo->delta = max(grafo->delta, max(v1->grado, v2->grado));
     }
