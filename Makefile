@@ -18,4 +18,8 @@ clean:
 valgrind:
 	valgrind --leak-check=full --show-leak-kinds=all ./$(TARGET)
 
+callgrind:
+	valgrind --tool=callgrind --dump-instr=yes --simulate-cache=yes --collect-jumps=yes ./$(TARGET)
 
+massif:
+	valgrind --tool=massif ./$(TARGET)
