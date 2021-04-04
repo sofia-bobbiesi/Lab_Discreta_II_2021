@@ -74,8 +74,7 @@ Grafo ConstruccionDelGrafo() {
     vertice v1 = NULL, v2 = NULL;
     Node avl = NULL; // creo el arbol
     // Avanza leyendo sobre las lineas que debe omitir ('c')
-    while (fgets(buffer, 255, stdin) != NULL && buffer[0] == 'c')
-        ;
+    while (fgets(buffer, 255, stdin) != NULL && buffer[0] == 'c');
     // leo la primera linea con los datos del grafo
     check = sscanf(buffer, "%c %s %u %u %s", &indicador, edge, &n, &m, discard);
     if (check != 4 || (indicador != 'p') || strcmp(edge, "edge")) {
@@ -171,8 +170,10 @@ Grafo CopiarGrafo(Grafo G) {
             grafo_copia->vertices[i]->vecinos[j]->peso_u2v =
                 G->vertices[i]->vecinos[j]->peso_u2v;
         }
-        grafo_copia->vertices_ordenados[i] = 
-            grafo_copia->vertices[G->vertices_ordenados[i]->posicion];
+        // recupero la posicion ordenada del vertice para recuperarlo
+        // en el arreglo sin orden, así, la copia no genera punteros vacios
+        u32 idx_orden = G->vertices_ordenados[i]->posicion;
+        grafo_copia->vertices_ordenados[i] = grafo_copia->vertices[idx_orden];
     }
     return grafo_copia;
 }
@@ -256,14 +257,14 @@ u32 FijarPesoLadoConVecino(u32 j, u32 i, u32 p, Grafo G) {
 
 int main() {
     Grafo graph = ConstruccionDelGrafo();
-    //Grafo copito = CopiarGrafo(graph);
+    Grafo copito = CopiarGrafo(graph);
     //FijarOrden(2,graph,3);
-    imprimir_grafo(graph);
+    //imprimir_grafo(graph);
     //FijarColor(50,2,copito);
     //imprimir_grafo(copito);
     // printf("Orden vecino %u\n",OrdenVecino(2,0,graph));
     // printf("color vecino: %u\n",ColorVecino(1,0,graph));
-    //DestruccionDelGrafo(copito);
+    DestruccionDelGrafo(copito);
     DestruccionDelGrafo(graph);
     return 0;
 }
