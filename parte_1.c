@@ -239,9 +239,9 @@ char FijarColor(u32 x, u32 i, Grafo G) {
 
 char FijarOrden(u32 i, Grafo G, u32 N) {
     if (i < G->n_vertices && N < G->n_vertices) {
-        G->vertices_ordenados[i] = G->vertices[N];
-        u32 indx = G->vertices_ordenados[i]->posicion;
-        G->vertices[indx]->posicion = i;
+        u32 indx = G->vertices_ordenados[N]->posicion;
+        G->vertices_ordenados[N] = G->vertices[i];
+        G->vertices[indx]->posicion = N;
         return 0;
     }
     return 1;
@@ -256,15 +256,15 @@ u32 FijarPesoLadoConVecino(u32 j, u32 i, u32 p, Grafo G) {
 }
 
 int main() {
-    Grafo graph = ConstruccionDelGrafo();
-    Grafo copito = CopiarGrafo(graph);
-    //FijarOrden(2,graph,3);
-    //imprimir_grafo(graph);
-    //FijarColor(50,2,copito);
-    //imprimir_grafo(copito);
-    // printf("Orden vecino %u\n",OrdenVecino(2,0,graph));
-    // printf("color vecino: %u\n",ColorVecino(1,0,graph));
-    DestruccionDelGrafo(copito);
-    DestruccionDelGrafo(graph);
+    // Grafo graph = ConstruccionDelGrafo();
+    // Grafo copito = CopiarGrafo(graph);
+    // FijarOrden(0,graph,2);
+    // imprimir_grafo(graph);
+    // FijarColor(50,2,copito);
+    // imprimir_grafo(copito);
+    // printf("Orden vecino %u\n",OrdenVecino(0,1,graph));
+    // printf("color vecino: %u\n",ColorVecino(0,3,copito));
+    // DestruccionDelGrafo(copito);
+    // DestruccionDelGrafo(graph);
     return 0;
 }
