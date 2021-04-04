@@ -102,14 +102,17 @@ Node insert(Node node, u32 key, Grafo G, u32 *position, u32 *pos_v) {
         *position += 1;
         return new_node;
     }
-    if (key < node->key)
+    if (key < node->key){
         node->left = insert(node->left, key, G, position, pos_v);
-    else if (key > node->key)
+    }
+    else if (key > node->key){
         node->right = insert(node->right, key, G, position, pos_v);
-    else // Equal keys are not allowed in BST
+    }
+    else{ // Equal keys are not allowed in BST
          // the node exists, therefore it also exists in the array
         *pos_v = node->position;
-    return node;
+        return node;
+    }
 
     /* 2. Update height of this ancestor node */
     node->height = 1 + max(height(node->left), height(node->right));
