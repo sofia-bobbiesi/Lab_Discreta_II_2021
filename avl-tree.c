@@ -25,12 +25,13 @@ u32 max(u32 a, u32 b) {
     return (a > b) ? a : b;
 }
 
-static vertice crear_vertice(u32 nombre) {
+static vertice crear_vertice(u32 nombre,u32 size) {
     vertice nuevo_vertice = calloc(1,sizeof(struct _vertice_t));
     assert(nuevo_vertice != NULL);
 
     nuevo_vertice->nombre_real = nombre;
-    nuevo_vertice->vecinos = calloc(1,sizeof(vecinos));
+    nuevo_vertice->vecinos = calloc(size,sizeof(vecinos));
+    nuevo_vertice->size=size;
 
     return nuevo_vertice;
 }
@@ -94,7 +95,7 @@ Node insert(Node node, u32 key, Grafo G, u32 *position, u32 *pos_v) {
     /* 1. Perform the normal BST insertion */
     if (node == NULL) {
         Node new_node = newNode(key);
-        vertice v = crear_vertice(key);
+        vertice v = crear_vertice(key,(1));
         new_node->position = *position;
         v->posicion = *position;
         G->vertices[*position] = v;

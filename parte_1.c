@@ -59,12 +59,20 @@ vecinos crear_vecino(vertice lado) {
     return nuevo_vecino;
 }
 
-void agregar_vecino(vertice vertx, vertice lado) {
+u32 min(u32 num1, u32 num2) {
+    return (num1 > num2 ) ? num2 : num1;
+}
+
+void agregar_vecino(Grafo G,vertice vertx, vertice lado) {
+    if(vertx->grado==(vertx->size)){
+        u32 new_size = min(((vertx->size)*2),G->m_lados);
+        vertx->vecinos = (vecinos *)realloc(vertx->vecinos,
+                                    (new_size * sizeof(struct lado_t)));
+        vertx->size = new_size;
+    }
     assert(vertx->vecinos != NULL);
     vertx->vecinos[vertx->grado] = crear_vecino(lado);
     vertx->grado++;
-    vertx->vecinos = (vecinos *)realloc(vertx->vecinos,
-                                    (vertx->grado) * sizeof(struct lado_t));
 }
 
 Grafo ConstruccionDelGrafo() {
@@ -107,11 +115,17 @@ Grafo ConstruccionDelGrafo() {
         avl = insert(avl, lado, grafo, &position, &pos_l); // cargo el lado
         v2 = grafo->vertices[pos_l];
         // crear_vecino para v1 y v2 en agregar vecino
-        agregar_vecino(v1, v2);
-        agregar_vecino(v2, v1);
+        agregar_vecino(grafo,v1, v2);
+        agregar_vecino(grafo,v2, v1);
 
         grafo->delta = max(grafo->delta, max(v1->grado, v2->grado));
     }
+    for (u32 i = 0u; i < n; i++)
+    {
+        grafo->vertices[i]->vecinos = (vecinos *)realloc(grafo->vertices[i]->vecinos,
+                                    (grafo->vertices[i]->grado) * sizeof(struct lado_t));
+    }
+    
     vertice *v_orden = grafo->vertices_ordenados;
     avl_to_sorting_array(avl,grafo->vertices,&v_orden);
     // Matar el avl, ya que no lo volvemos a usar
@@ -155,6 +169,7 @@ Grafo CopiarGrafo(Grafo G) {
         grafo_copia->vertices[i]->posicion = G->vertices[i]->posicion;
         grafo_copia->vertices[i]->color = G->vertices[i]->color;
         grafo_copia->vertices[i]->grado = G->vertices[i]->grado;
+        grafo_copia->vertices[i]->size = G->vertices[i]->size;
         grafo_copia->vertices[i]->nombre_real = G->vertices[i]->nombre_real;
         grafo_copia->vertices[i]->vecinos =
             calloc(G->vertices[i]->grado,sizeof(struct lado_t));

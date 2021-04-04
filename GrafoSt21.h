@@ -32,6 +32,7 @@ struct _vertice_t {
     u32 posicion;
     u32 color;
     vecinos *vecinos;
+    u32 size;
 };
 
 #endif
