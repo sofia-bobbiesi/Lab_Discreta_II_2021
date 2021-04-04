@@ -104,7 +104,7 @@ Grafo ConstruccionDelGrafo() {
             fprintf(stderr, "\tERROR: Formato invalido.\n");
             DestruccionDelGrafo(grafo);
             deleteTree(avl);
-            exit(EXIT_FAILURE);
+            return NULL;
         }
         check =
             sscanf(buffer, "%c %u %u %s", &indicador, &vertx, &lado, discard);
@@ -112,7 +112,7 @@ Grafo ConstruccionDelGrafo() {
             fprintf(stderr, "\tERROR: Formato invalido.\n");
             DestruccionDelGrafo(grafo);
             deleteTree(avl);
-            exit(EXIT_FAILURE);
+            return NULL;
         }
         // Si no falla, empiezo a cargar vertice y lado al arbol
         // No puedo crear el vertice antes de saber si está en el arbol.
@@ -166,15 +166,24 @@ Grafo CopiarGrafo(Grafo G) {
     grafo_copia->m_lados = G->m_lados;
     grafo_copia->delta = G->delta;
     grafo_copia->vertices = calloc(G->n_vertices,sizeof(struct _vertice_t));
-    assert(grafo_copia->vertices != NULL);
+    if(grafo_copia->vertices == NULL){
+        DestruccionDelGrafo(grafo_copia);
+        return NULL;
+    }
     grafo_copia->vertices_ordenados = 
         calloc(G->n_vertices,sizeof(struct _vertice_t));
-    assert(grafo_copia->vertices_ordenados != NULL);
+    if(grafo_copia->vertices_ordenados == NULL){
+        DestruccionDelGrafo(grafo_copia);
+        return NULL;
+    }
     
 
     for (u32 i = 0u; i < G->n_vertices; ++i) {
         grafo_copia->vertices[i] = calloc(1,sizeof(struct _vertice_t));
-        assert(grafo_copia->vertices[i] != NULL);
+        if(grafo_copia->vertices[i] == NULL){
+            DestruccionDelGrafo(grafo_copia);
+            return NULL;
+        }
         grafo_copia->vertices[i]->posicion = G->vertices[i]->posicion;
         grafo_copia->vertices[i]->color = G->vertices[i]->color;
         grafo_copia->vertices[i]->grado = G->vertices[i]->grado;
@@ -182,13 +191,19 @@ Grafo CopiarGrafo(Grafo G) {
         grafo_copia->vertices[i]->nombre_real = G->vertices[i]->nombre_real;
         grafo_copia->vertices[i]->vecinos =
             calloc(G->vertices[i]->grado,sizeof(struct lado_t));
-        assert(grafo_copia->vertices[i]->vecinos != NULL);
+        if(grafo_copia->vertices[i]->vecinos == NULL){
+            DestruccionDelGrafo(grafo_copia);
+            return NULL;
+        }
     }
     for (u32 i = 0u; i < G->n_vertices; ++i){
        for (u32 j = 0; j < G->vertices[i]->grado; ++j) {
             grafo_copia->vertices[i]->vecinos[j] =
                 calloc(1,sizeof(struct lado_t));
-            assert(grafo_copia->vertices[i]->vecinos[j] != NULL);
+            if(grafo_copia->vertices[i]->vecinos[j] == NULL){
+                DestruccionDelGrafo(grafo_copia);
+                return NULL;
+            }
             grafo_copia->vertices[i]->vecinos[j]->vertice_j =
                 grafo_copia->vertices[G->vertices[i]->vecinos[j]->vertice_j->posicion];
             grafo_copia->vertices[i]->vecinos[j]->peso_u2v =
