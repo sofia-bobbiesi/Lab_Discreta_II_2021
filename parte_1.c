@@ -122,8 +122,11 @@ Grafo ConstruccionDelGrafo() {
     }
     for (u32 i = 0u; i < n; i++)
     {
-        grafo->vertices[i]->vecinos = (vecinos *)realloc(grafo->vertices[i]->vecinos,
+        if((grafo->vertices[i]->grado)!=(grafo->vertices[i]->size)){
+            grafo->vertices[i]->vecinos = (vecinos *)realloc(grafo->vertices[i]->vecinos,
                                     (grafo->vertices[i]->grado) * sizeof(struct lado_t));
+        }
+        
     }
     
     vertice *v_orden = grafo->vertices_ordenados;
