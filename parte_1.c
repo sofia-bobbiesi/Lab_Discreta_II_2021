@@ -62,7 +62,6 @@ vecinos crear_vecino(vertice lado) {
 void agregar_vecino(vertice vertx, vertice lado) {
     assert(vertx->vecinos != NULL);
     vertx->vecinos[vertx->grado] = crear_vecino(lado);
-    //vertx->vecinos[vertx->grado]->posicion = posicion;
     vertx->grado++;
     vertx->vecinos = (vecinos *)realloc(vertx->vecinos,
                                     (vertx->grado) * sizeof(struct lado_t));
@@ -145,23 +144,28 @@ Grafo CopiarGrafo(Grafo G) {
     grafo_copia->m_lados = G->m_lados;
     grafo_copia->delta = G->delta;
     grafo_copia->vertices = calloc(G->n_vertices,sizeof(struct _vertice_t));
+    assert(grafo_copia->vertices != NULL);
     grafo_copia->vertices_ordenados = 
         calloc(G->n_vertices,sizeof(struct _vertice_t));
-    assert(grafo_copia->vertices != NULL);
+    assert(grafo_copia->vertices_ordenados != NULL);
+    
 
     for (u32 i = 0u; i < G->n_vertices; ++i) {
         grafo_copia->vertices[i] = calloc(1,sizeof(struct _vertice_t));
+        assert(grafo_copia->vertices[i] != NULL);
         grafo_copia->vertices[i]->posicion = G->vertices[i]->posicion;
         grafo_copia->vertices[i]->color = G->vertices[i]->color;
         grafo_copia->vertices[i]->grado = G->vertices[i]->grado;
         grafo_copia->vertices[i]->nombre_real = G->vertices[i]->nombre_real;
         grafo_copia->vertices[i]->vecinos =
             calloc(G->vertices[i]->grado,sizeof(struct lado_t));
+        assert(grafo_copia->vertices[i]->vecinos != NULL);
     }
     for (u32 i = 0u; i < G->n_vertices; ++i){
        for (u32 j = 0; j < G->vertices[i]->grado; ++j) {
             grafo_copia->vertices[i]->vecinos[j] =
                 calloc(1,sizeof(struct lado_t));
+            assert(grafo_copia->vertices[i]->vecinos[j] != NULL);
             grafo_copia->vertices[i]->vecinos[j]->vertice_j =
                 grafo_copia->vertices[G->vertices[i]->vecinos[j]->vertice_j->posicion];
             grafo_copia->vertices[i]->vecinos[j]->peso_u2v =
