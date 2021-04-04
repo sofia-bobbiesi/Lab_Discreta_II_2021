@@ -99,7 +99,13 @@ Grafo ConstruccionDelGrafo() {
     grafo->vertices_ordenados = calloc(n,sizeof(struct _vertice_t));
     assert(grafo->vertices != NULL);
 
-    for (u32 i = 0u; (i < m) && (fgets(buffer, 255, stdin) != NULL); ++i) {
+    for (u32 i = 0u; i < m; ++i) {
+        if((fgets(buffer, 255, stdin) == NULL)){
+            fprintf(stderr, "\tERROR: Formato invalido.\n");
+            DestruccionDelGrafo(grafo);
+            deleteTree(avl);
+            exit(EXIT_FAILURE);
+        }
         check =
             sscanf(buffer, "%c %u %u %s", &indicador, &vertx, &lado, discard);
         if (check != 3 || (indicador != 'e')) {
