@@ -87,7 +87,7 @@ Grafo ConstruccionDelGrafo() {
     check = sscanf(buffer, "%c %s %u %u %s", &indicador, edge, &n, &m, discard);
     if (check != 4 || (indicador != 'p') || strcmp(edge, "edge")) {
         fprintf(stderr, "\tERROR: Formato invalido.\n");
-        exit(EXIT_FAILURE);
+        return NULL;
     }
     // Si no falla, creo el grafo 
     grafo = malloc(sizeof(struct GrafoSt));
@@ -144,7 +144,7 @@ Grafo ConstruccionDelGrafo() {
 
 void DestruccionDelGrafo(Grafo G) {
     if (G == NULL || G->vertices == NULL) {
-        exit(EXIT_FAILURE);
+        return;
     }
     for (u32 i = 0; i < (G->n_vertices) && (G->vertices[i] != NULL); i++) {
         u32 grado = (G->vertices[i]->grado);
@@ -160,8 +160,13 @@ void DestruccionDelGrafo(Grafo G) {
 }
 
 Grafo CopiarGrafo(Grafo G) {
+    if (G==NULL){
+        return NULL;
+    }
     Grafo grafo_copia = calloc(1, sizeof(struct GrafoSt));
-    assert(grafo_copia != NULL);
+    if (grafo_copia==NULL){
+        return NULL;
+    }
     grafo_copia->n_vertices = G->n_vertices;
     grafo_copia->m_lados = G->m_lados;
     grafo_copia->delta = G->delta;
