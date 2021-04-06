@@ -1,10 +1,10 @@
-// C program to insert a node in AVL tree
+// Programa en C utilizado para insertar un nodo en un arbol AVL
 #include "avl-tree.h"
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-// An AVL tree node
+// Estructura de un nodo para un arbol AVL
 struct Node_t {
     u32 key;
     u32 position;
@@ -13,14 +13,14 @@ struct Node_t {
     u32 height;
 };
 
-// A utility function to get the height of the tree
+// Función utilitaria para obtener la altura del arbol
 u32 height(Node N) {
     if (N == NULL)
         return 0;
     return N->height;
 }
 
-// A utility function to get maximum of two integers
+// Función utilitaria para obtener el maximo entre dos enteros u32
 u32 max(u32 a, u32 b) {
     return (a > b) ? a : b;
 }
@@ -35,64 +35,63 @@ static vertice crear_vertice(u32 nombre,u32 size) {
 
     return nuevo_vertice;
 }
-/* Helper function that allocates a new node with the given key and
-        NULL left and right pointers. */
+
+/* Función auxiliar que aloja memoria para un nuevo nodo, dada una llave y
+    punteros NULL hacia izquierda y derecha */
 Node newNode(u32 key) {
     Node node = malloc(sizeof(struct Node_t));
     node->key = key;
     node->left = NULL;
     node->right = NULL;
-    node->height = 1; // new node is initially added at leaf
+    node->height = 1; // El nuevo nodo es inicialmente agregado como una hoja
     return (node);
 }
 
-// A utility function to right rotate subtree rooted with y
-// See the diagram given above.
+// Función utilitaria para rotar un subarbol hacia la derecha
 Node rightRotate(Node y) {
     Node x = y->left;
     Node T2 = x->right;
 
-    // Perform rotation
+    // Realizar la rotación
     x->right = y;
     y->left = T2;
 
-    // Update heights
+    // Actualizar alturas
     y->height = max(height(y->left), height(y->right)) + 1;
     x->height = max(height(x->left), height(x->right)) + 1;
 
-    // Return new root
+    // Devolver nueva raíz
     return x;
 }
 
-// A utility function to left rotate subtree rooted with x
-// See the diagram given above.
+// Función utilitaria para rotar un subarbol hacia la izquierda
 Node leftRotate(Node x) {
     Node y = x->right;
     Node T2 = y->left;
 
-    // Perform rotation
+    // Realizar rotación
     y->left = x;
     x->right = T2;
 
-    // Update heights
+    // Actualizar alturas
     x->height = max(height(x->left), height(x->right)) + 1;
     y->height = max(height(y->left), height(y->right)) + 1;
 
-    // Return new root
+    // Devolver nueva raíz
     return y;
 }
 
-// Get Balance factor of node N
+// Obtener el factor de balance de un nodo N
 u32 getBalance(Node N) {
     if (N == NULL)
         return 0;
     return height(N->left) - height(N->right);
 }
 
-// Recursive function to insert a key in the subtree rooted
-// with node and returns the new root of the subtree.
+/* Función recursiva para insertar un nuevo Nodo en un subarbol "G", manteniendo
+    el balance del mismo. Devuelve la nueva raíz del subarbol.*/
 Node insert(Node node, u32 key, Grafo G, u32 *position, u32 *pos_v) {
-    /* 1. Perform the normal BST insertion */
+    /* 1. Realizar la inserción normal BST */
     if (node == NULL) {
         Node new_node = newNode(key);
         vertice v = crear_vertice(key,(1));
@@ -109,53 +108,52 @@ Node insert(Node node, u32 key, Grafo G, u32 *position, u32 *pos_v) {
     else if (key > node->key){
         node->right = insert(node->right, key, G, position, pos_v);
     }
-    else{ // Equal keys are not allowed in BST
-         // the node exists, therefore it also exists in the array
+    else{ /* Las llaves idénticas no están permitidas en un BST
+                El nodo ya existe, por lo tanto ya existe en el arreglo */
         *pos_v = node->position;
         return node;
     }
 
-    /* 2. Update height of this ancestor node */
+    /* 2. Actualizar la altura de éste nodo ancestro */
     node->height = 1 + max(height(node->left), height(node->right));
 
-    /* 3. Get the balance factor of this ancestor
-            node to check whether this node became
-            unbalanced */
+    /* 3. Se obtiene el factor de balance de éste nodo ancestro
+            para checkear si fue desbalanceado o no */
     int balance = getBalance(node);
 
-    // If this node becomes unbalanced, then
-    // there are 4 cases
+    // Si fue desbalanceado, entonces existen 4 casos:
 
-    // Left Left Case
+    // Caso Izquierda-Izquierda
     if (balance > 1 && key < node->left->key)
         return rightRotate(node);
 
-    // Right Right Case
+    // Caso Derecha-Derecha
     if (balance < -1 && key > node->right->key)
         return leftRotate(node);
 
-    // Left Right Case
+    // Caso Izquierda-Derecha
     if (balance > 1 && key > node->left->key) {
         node->left = leftRotate(node->left);
         return rightRotate(node);
     }
 
-    // Right Left Case
+    // Caso Derecha-Izquierda
     if (balance < -1 && key < node->right->key) {
         node->right = rightRotate(node->right);
         return leftRotate(node);
     }
 
-    /* return the (unchanged) node pou32er */
+    /* Devuelve la nueva raíz del subarbol */
     return node;
 }
 
+// Elimina el árbol, liberando la memoria correspondiente al mismo
 void deleteTree(Node avl) {
     if (avl != NULL) {
         deleteTree(avl->right);
         deleteTree(avl->left);
         free(avl);
-        avl = NULL; // evitar danling pointers
+        avl = NULL; // Evitar danling pointers
     }
 }
 

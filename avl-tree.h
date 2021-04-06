@@ -6,32 +6,30 @@
 typedef struct Node_t *Node;
 typedef struct Tuple_t *Tuple;
 
-// A utility function to get the height of the tree
+// Función utilitaria para obtener la altura del arbol
 u32 height(Node N);
 
-// A utility function to get maximum of two u32egers
+// Función utilitaria para obtener el maximo entre dos enteros u32
 u32 max(u32 a, u32 b);
 
-/* Helper function that allocates a new node with the given key and
-        NULL left and right pou32ers. */
+/* Función auxiliar que aloja memoria para un nuevo nodo, dada una llave y
+    punteros NULL hacia izquierda y derecha */
 Node newNode(u32 key);
 
-// A utility function to right rotate subtree rooted with y
-// See the diagram given above.
+// Función utilitaria para rotar un subarbol hacia la derecha
 Node rightRotate(Node y);
 
-// A utility function to left rotate subtree rooted with x
-// See the diagram given above.
+// Función utilitaria para rotar un subarbol hacia la izquierda
 Node leftRotate(Node x);
 
-// Get Balance factor of node N
+// Obtener el factor de balance de un nodo N
 u32 getBalance(Node N);
 
-// Recursive function to insert a key in the subtree rooted
-// with node and returns the new root of the subtree.
+/* Función recursiva para insertar un nuevo Nodo en un subarbol "G", manteniendo
+    el balance del mismo. Devuelve la nueva raíz del subarbol.*/
 Node insert(Node node, u32 key, Grafo G, u32 *position, u32 *pos_v);
 
-//
+// Elimina el árbol, liberando la memoria correspondiente al mismo
 void deleteTree(Node avl);
 
 void avl_to_sorting_array(Node root, vertice *v, vertice **v_orden);

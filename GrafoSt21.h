@@ -8,7 +8,7 @@ typedef struct lado_t *vecinos;
 struct GrafoSt {
     u32 n_vertices;
     u32 m_lados;
-    u32 delta; // mayor grado del grafo ∆(G)
+    u32 delta; // Mayor grado del grafo ∆(G)
     vertice *vertices;
     vertice *vertices_ordenados;
 };
@@ -28,7 +28,7 @@ struct lado_t {
 */
 struct _vertice_t {
     u32 nombre_real;
-    u32 grado; // numero de vecinos
+    u32 grado; // Numero de vecinos
     u32 posicion;
     u32 color;
     vecinos *vecinos;
