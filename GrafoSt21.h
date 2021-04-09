@@ -35,4 +35,6 @@ struct _vertice_t {
     u32 size;
 };
 
+u32 min(u32 num1, u32 num2);
+
 #endif
