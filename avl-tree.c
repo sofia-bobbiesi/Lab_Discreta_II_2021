@@ -18,19 +18,18 @@ u32 height(Node N) {
     return N->height;
 }
 
-static vertice crear_vertice(u32 nombre,u32 size) {
-    vertice nuevo_vertice = calloc(1,sizeof(struct _vertice_t));
-    if(nuevo_vertice==NULL){
+static vertice crear_vertice(u32 nombre, u32 size) {
+    vertice nuevo_vertice = calloc(1, sizeof(struct _vertice_t));
+    if (nuevo_vertice == NULL) {
         return NULL;
     }
 
     nuevo_vertice->nombre_real = nombre;
-    nuevo_vertice->vecinos = calloc(size,sizeof(vecinos));
-    nuevo_vertice->size=size;
+    nuevo_vertice->vecinos = calloc(size, sizeof(vecinos));
+    nuevo_vertice->size = size;
 
     return nuevo_vertice;
 }
-
 
 Node newNode(u32 key) {
     Node node = malloc(sizeof(struct Node_t));
@@ -56,7 +55,6 @@ Node rightRotate(Node y) {
     // Devolver nueva raíz
     return x;
 }
-
 
 Node leftRotate(Node x) {
     Node y = x->right;
@@ -84,8 +82,8 @@ Node insert(Node node, u32 key, Grafo G, u32 *position, u32 *pos_v) {
     // 1. Realizar la inserción normal BST
     if (node == NULL) {
         Node new_node = newNode(key);
-        vertice v = crear_vertice(key,(1));
-        if(v==NULL){
+        vertice v = crear_vertice(key, (1));
+        if (v == NULL) {
             deleteTree(node);
             return NULL;
         }
@@ -96,15 +94,13 @@ Node insert(Node node, u32 key, Grafo G, u32 *position, u32 *pos_v) {
         *position += 1;
         return new_node;
     }
-    if (key < node->key){
+    if (key < node->key) {
         node->left = insert(node->left, key, G, position, pos_v);
-    }
-    else if (key > node->key){
+    } else if (key > node->key) {
         node->right = insert(node->right, key, G, position, pos_v);
-    }
-    else{ 
-    // Los nodos de nombres idénticos no están permitidas en un BST.
-    // Si el nodo ya existe, existe también en el arreglo de vértices.
+    } else {
+        // Los nodos de nombres idénticos no están permitidas en un BST.
+        // Si el nodo ya existe, existe también en el arreglo de vértices.
         *pos_v = node->position;
         return node;
     }
@@ -152,7 +148,7 @@ void deleteTree(Node avl) {
 }
 
 void avl_to_sorting_array(Node root, vertice *v, vertice **v_orden) {
-    if(root != NULL) {
+    if (root != NULL) {
         avl_to_sorting_array(root->left, v, v_orden);
         **v_orden = v[root->position];
         ++*v_orden;

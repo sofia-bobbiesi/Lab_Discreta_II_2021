@@ -9,12 +9,12 @@ typedef struct Node_t *Node;
 typedef struct Tuple_t *Tuple;
 
 u32 height(Node N);
-/* Función utilitaria para obtener la altura del arbol */\
+/* Función utilitaria para obtener la altura del arbol */
 
 Node newNode(u32 key);
-/* 
+/*
     Función auxiliar que aloja memoria para un nuevo nodo, dada una llave y
-    punteros NULL hacia izquierda y derecha 
+    punteros NULL hacia izquierda y derecha
 */
 
 Node rightRotate(Node y);
@@ -27,20 +27,20 @@ u32 getBalance(Node N);
 /* Obtener el factor de balance de un nodo N */
 
 Node insert(Node node, u32 key, Grafo G, u32 *position, u32 *pos_v);
-/* 
-    Función recursiva para insertar un nuevo Nodo en un subarbol "G", manteniendo
-    el balance del mismo. Devuelve la nueva raíz del subarbol.
+/*
+    Función recursiva para insertar un nuevo Nodo en un subarbol "G",
+   manteniendo el balance del mismo. Devuelve la nueva raíz del subarbol.
 */
 
 void deleteTree(Node avl);
 /*  Elimina el árbol, liberando la memoria correspondiente al mismo */
 
 void avl_to_sorting_array(Node root, vertice *v, vertice **v_orden);
-/* 
-    Permite construir un arreglo ordenado basandose en la idea de un 
+/*
+    Permite construir un arreglo ordenado basandose en la idea de un
     recorrido preorder para un AVL. Como cada nodo indica la posición de un
     vértice, el arreglo final consta de los vértices referenciados en el
-    árbol de manera ordenada, evitando así la complejidad de hacer un 
+    árbol de manera ordenada, evitando así la complejidad de hacer un
     ordenamiento mediante algún algoritmo costoso.
 */
 
