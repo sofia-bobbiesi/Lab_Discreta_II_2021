@@ -133,8 +133,16 @@ Grafo ConstruccionDelGrafo() {
         // Si no falla, empiezo a cargar vertice y lado al arbol
         // No puedo crear el vertice antes de saber si está en el arbol.
         avl = insert(avl, vertx, grafo, &position, &pos_v); // cargo el vertice
+        if(avl==NULL){
+            DestruccionDelGrafo(grafo);
+            return NULL;
+        }
         v1 = grafo->vertices[pos_v];
         avl = insert(avl, lado, grafo, &position, &pos_l); // cargo el lado
+        if(avl==NULL){
+            DestruccionDelGrafo(grafo);
+            return NULL;
+        }
         v2 = grafo->vertices[pos_l];
         // crear_vecino para v1 y v2 en agregar vecino
         agregar_vecino(grafo,v1, v2);

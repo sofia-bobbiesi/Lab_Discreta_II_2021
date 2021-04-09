@@ -24,7 +24,9 @@ u32 max(u32 a, u32 b) {
 
 static vertice crear_vertice(u32 nombre,u32 size) {
     vertice nuevo_vertice = calloc(1,sizeof(struct _vertice_t));
-    assert(nuevo_vertice != NULL);
+    if(nuevo_vertice==NULL){
+        return NULL;
+    }
 
     nuevo_vertice->nombre_real = nombre;
     nuevo_vertice->vecinos = calloc(size,sizeof(vecinos));
@@ -87,6 +89,10 @@ Node insert(Node node, u32 key, Grafo G, u32 *position, u32 *pos_v) {
     if (node == NULL) {
         Node new_node = newNode(key);
         vertice v = crear_vertice(key,(1));
+        if(v==NULL){
+            deleteTree(node);
+            return NULL;
+        }
         new_node->position = *position;
         v->posicion = *position;
         G->vertices[*position] = v;
