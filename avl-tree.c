@@ -18,10 +18,6 @@ u32 height(Node N) {
     return N->height;
 }
 
-u32 max(u32 a, u32 b) {
-    return (a > b) ? a : b;
-}
-
 static vertice crear_vertice(u32 nombre,u32 size) {
     vertice nuevo_vertice = calloc(1,sizeof(struct _vertice_t));
     if(nuevo_vertice==NULL){

@@ -35,6 +35,12 @@ struct _vertice_t {
     u32 size;
 };
 
-u32 min(u32 num1, u32 num2);
+inline u32 min(u32 num1, u32 num2) {
+    return (num1 > num2 ) ? num2 : num1;
+}
+
+inline u32 max(u32 a, u32 b) {
+    return (a > b) ? a : b;
+}
 
 #endif

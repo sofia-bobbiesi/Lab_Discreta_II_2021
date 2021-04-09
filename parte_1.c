@@ -60,10 +60,6 @@ vecinos crear_vecino(vertice lado) {
     return nuevo_vecino;
 }
 
-u32 min(u32 num1, u32 num2) {
-    return (num1 > num2 ) ? num2 : num1;
-}
-
 void agregar_vecino(Grafo G,vertice vertx, vertice lado) {
     if(vertx->grado==(vertx->size)){
         u32 new_size = min(((vertx->size)*2),G->m_lados);

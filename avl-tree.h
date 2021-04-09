@@ -9,10 +9,7 @@ typedef struct Node_t *Node;
 typedef struct Tuple_t *Tuple;
 
 u32 height(Node N);
-/* Función utilitaria para obtener la altura del arbol */
-
-u32 max(u32 a, u32 b);
-/* Función utilitaria para obtener el maximo entre dos enteros u32 */
+/* Función utilitaria para obtener la altura del arbol */\
 
 Node newNode(u32 key);
 /* 
