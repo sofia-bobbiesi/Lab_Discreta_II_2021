@@ -7,6 +7,12 @@ typedef struct GrafoSt *Grafo;
 /* Funciones extra para el manejo de grafos */
 
 void imprimir_grafo(Grafo graph);
+/*
+    Imprime la información general del grafo, sus vértices con los
+    correspondientes vecinos y los vertices ordenados, también con sus
+    vecinos. Usar con cuidado ya que en grafos grandes podría realentizar
+    la ejecución.
+*/
 
 /* Funciones De Construccion/Destruccion/Copia del grafo */
 
