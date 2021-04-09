@@ -1,5 +1,4 @@
 #include "avl-tree.h"
-#include <assert.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -28,7 +27,7 @@ void imprimir_grafo(Grafo graph) {
                 printf("}\n\n");
             }
         }
-        printf("Ordenados\n");
+        printf("Ordenado:\n");
         for (u32 i = 0; i < graph->n_vertices; i++) {
             vertice curr_vtx = graph->vertices_ordenados[i];
             printf("Id: %u, Grado: %u, Color: %u\n", curr_vtx->nombre_real,
@@ -53,7 +52,9 @@ void imprimir_grafo(Grafo graph) {
 
 vecinos crear_vecino(vertice lado) {
     vecinos nuevo_vecino = calloc(1,sizeof(struct lado_t));
-    assert(nuevo_vecino != NULL);
+    if(nuevo_vecino == NULL){
+        return NULL;
+    }
     nuevo_vecino->vertice_j = lado;
     nuevo_vecino->peso_u2v = 0;
     return nuevo_vecino;
@@ -70,8 +71,15 @@ void agregar_vecino(Grafo G,vertice vertx, vertice lado) {
                                     (new_size * sizeof(struct lado_t)));
         vertx->size = new_size;
     }
-    assert(vertx->vecinos != NULL);
+    if(vertx->vecinos == NULL){
+        DestruccionDelGrafo(G);
+        return;
+    }
     vertx->vecinos[vertx->grado] = crear_vecino(lado);
+    if (vertx->vecinos[vertx->grado] == NULL){
+        DestruccionDelGrafo(G);
+        return;
+    }
     vertx->grado++;
 }
 
@@ -81,6 +89,8 @@ Grafo ConstruccionDelGrafo() {
     u32 check = 0, n = 0, m = 0, vertx = 0, lado = 0, position = 0, pos_v = 0, pos_l = 0;
     vertice v1 = NULL, v2 = NULL;
     Node avl = NULL; // creo el arbol
+
+
     // Avanza leyendo sobre las lineas que debe omitir ('c')
     while (fgets(buffer, 255, stdin) != NULL && buffer[0] == 'c');
     // leo la primera linea con los datos del grafo
@@ -91,13 +101,19 @@ Grafo ConstruccionDelGrafo() {
     }
     // Si no falla, creo el grafo 
     grafo = malloc(sizeof(struct GrafoSt));
-    assert(grafo != NULL);
+    if(grafo == NULL){
+        DestruccionDelGrafo(grafo);
+        return NULL;
+    }
     grafo->n_vertices = n;
     grafo->m_lados = m;
     grafo->delta = 0;
     grafo->vertices = calloc(n, sizeof(struct _vertice_t));
     grafo->vertices_ordenados = calloc(n,sizeof(struct _vertice_t));
-    assert(grafo->vertices != NULL);
+    if(grafo->vertices == NULL || grafo->vertices_ordenados == NULL){
+        DestruccionDelGrafo(grafo);
+        return NULL;
+    }
 
     for (u32 i = 0u; i < m; ++i) {
         if((fgets(buffer, 255, stdin) == NULL)){
@@ -123,11 +139,13 @@ Grafo ConstruccionDelGrafo() {
         // crear_vecino para v1 y v2 en agregar vecino
         agregar_vecino(grafo,v1, v2);
         agregar_vecino(grafo,v2, v1);
-
+        if(grafo == NULL){
+            deleteTree(avl);
+            return NULL;
+        }
         grafo->delta = max(grafo->delta, max(v1->grado, v2->grado));
     }
-    for (u32 i = 0u; i < n; i++)
-    {
+    for (u32 i = 0u; i < n; ++i){
         if((grafo->vertices[i]->grado)!=(grafo->vertices[i]->size)){
             grafo->vertices[i]->vecinos = (vecinos *)realloc(grafo->vertices[i]->vecinos,
                                     (grafo->vertices[i]->grado) * sizeof(struct lado_t));
@@ -275,7 +293,7 @@ u32 PesoLadoConVecino(u32 j, u32 i, Grafo G) {
 
 char FijarColor(u32 x, u32 i, Grafo G) {
     if (i < G->n_vertices) {
-        (G->vertices[i])->color = x;
+        G->vertices[i]->color = x;
         return 0;
     }
     return 1;
@@ -300,15 +318,15 @@ u32 FijarPesoLadoConVecino(u32 j, u32 i, u32 p, Grafo G) {
 }
 
 int main() {
-    // Grafo graph = ConstruccionDelGrafo();
+    Grafo graph = ConstruccionDelGrafo();
     // Grafo copito = CopiarGrafo(graph);
     // FijarOrden(0,graph,2);
-    // imprimir_grafo(graph);
+    imprimir_grafo(graph);
     // FijarColor(50,2,copito);
     // imprimir_grafo(copito);
     // printf("Orden vecino %u\n",OrdenVecino(0,1,graph));
     // printf("color vecino: %u\n",ColorVecino(0,3,copito));
     // DestruccionDelGrafo(copito);
-    // DestruccionDelGrafo(graph);
+    DestruccionDelGrafo(graph);
     return 0;
 }
