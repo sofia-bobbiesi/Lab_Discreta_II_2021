@@ -1,4 +1,3 @@
-// Programa en C utilizado para insertar un nodo en un arbol AVL
 #include "avl-tree.h"
 #include <assert.h>
 #include <stdio.h>
@@ -13,14 +12,12 @@ struct Node_t {
     u32 height;
 };
 
-// Función utilitaria para obtener la altura del arbol
 u32 height(Node N) {
     if (N == NULL)
         return 0;
     return N->height;
 }
 
-// Función utilitaria para obtener el maximo entre dos enteros u32
 u32 max(u32 a, u32 b) {
     return (a > b) ? a : b;
 }
@@ -36,8 +33,7 @@ static vertice crear_vertice(u32 nombre,u32 size) {
     return nuevo_vertice;
 }
 
-/* Función auxiliar que aloja memoria para un nuevo nodo, dada una llave y
-    punteros NULL hacia izquierda y derecha */
+
 Node newNode(u32 key) {
     Node node = malloc(sizeof(struct Node_t));
     node->key = key;
@@ -47,7 +43,6 @@ Node newNode(u32 key) {
     return (node);
 }
 
-// Función utilitaria para rotar un subarbol hacia la derecha
 Node rightRotate(Node y) {
     Node x = y->left;
     Node T2 = x->right;
@@ -64,7 +59,7 @@ Node rightRotate(Node y) {
     return x;
 }
 
-// Función utilitaria para rotar un subarbol hacia la izquierda
+
 Node leftRotate(Node x) {
     Node y = x->right;
     Node T2 = y->left;
@@ -81,17 +76,14 @@ Node leftRotate(Node x) {
     return y;
 }
 
-// Obtener el factor de balance de un nodo N
 u32 getBalance(Node N) {
     if (N == NULL)
         return 0;
     return height(N->left) - height(N->right);
 }
 
-/* Función recursiva para insertar un nuevo Nodo en un subarbol "G", manteniendo
-    el balance del mismo. Devuelve la nueva raíz del subarbol.*/
 Node insert(Node node, u32 key, Grafo G, u32 *position, u32 *pos_v) {
-    /* 1. Realizar la inserción normal BST */
+    // 1. Realizar la inserción normal BST
     if (node == NULL) {
         Node new_node = newNode(key);
         vertice v = crear_vertice(key,(1));
@@ -108,17 +100,18 @@ Node insert(Node node, u32 key, Grafo G, u32 *position, u32 *pos_v) {
     else if (key > node->key){
         node->right = insert(node->right, key, G, position, pos_v);
     }
-    else{ /* Las llaves idénticas no están permitidas en un BST
-                El nodo ya existe, por lo tanto ya existe en el arreglo */
+    else{ 
+    // Los nodos de nombres idénticos no están permitidas en un BST.
+    // Si el nodo ya existe, existe también en el arreglo de vértices.
         *pos_v = node->position;
         return node;
     }
 
-    /* 2. Actualizar la altura de éste nodo ancestro */
+    // 2. Actualizar la altura de éste nodo ancestro
     node->height = 1 + max(height(node->left), height(node->right));
 
-    /* 3. Se obtiene el factor de balance de éste nodo ancestro
-            para checkear si fue desbalanceado o no */
+    // 3. Se obtiene el factor de balance de éste nodo ancestro
+    // para checkear si fue desbalanceado o no
     int balance = getBalance(node);
 
     // Si fue desbalanceado, entonces existen 4 casos:
@@ -143,11 +136,10 @@ Node insert(Node node, u32 key, Grafo G, u32 *position, u32 *pos_v) {
         return leftRotate(node);
     }
 
-    /* Devuelve la nueva raíz del subarbol */
+    // Devuelve la nueva raíz del subarbol
     return node;
 }
 
-// Elimina el árbol, liberando la memoria correspondiente al mismo
 void deleteTree(Node avl) {
     if (avl != NULL) {
         deleteTree(avl->right);
