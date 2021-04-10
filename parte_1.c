@@ -10,8 +10,8 @@ void imprimir_grafo(Grafo graph) {
         printf("Delta: %u\n", graph->delta);
         for (u32 i = 0; i < graph->n_vertices; i++) {
             vertice curr_vtx = graph->vertices[i];
-            printf("Id: %u, Grado: %u, Color: %u\n", curr_vtx->nombre_real,
-                   curr_vtx->grado, curr_vtx->color);
+            printf("Id: %u, Grado: %u, Color: %u, Posicion %u\n", curr_vtx->nombre_real,
+                   curr_vtx->grado, curr_vtx->color, curr_vtx->posicion);
 
             if (curr_vtx->vecinos != NULL) {
                 printf("Vecinos: {");
@@ -30,8 +30,8 @@ void imprimir_grafo(Grafo graph) {
         printf("Ordenado:\n");
         for (u32 i = 0; i < graph->n_vertices; i++) {
             vertice curr_vtx = graph->vertices_ordenados[i];
-            printf("Id: %u, Grado: %u, Color: %u\n", curr_vtx->nombre_real,
-                   curr_vtx->grado, curr_vtx->color);
+            printf("Id: %u, Grado: %u, Color: %u, Posicion %u \n", curr_vtx->nombre_real,
+                   curr_vtx->grado, curr_vtx->color, curr_vtx->posicion);
 
             if (curr_vtx->vecinos != NULL) {
                 printf("Vecinos: {");
@@ -301,13 +301,12 @@ char FijarColor(u32 x, u32 i, Grafo G) {
         return 0;
     }
     return 1;
-}
+}        
 
 char FijarOrden(u32 i, Grafo G, u32 N) {
     if (i < G->n_vertices && N < G->n_vertices) {
-        u32 indx = G->vertices_ordenados[N]->posicion;
-        G->vertices_ordenados[N] = G->vertices[i];
-        G->vertices[indx]->posicion = N;
+        G->vertices[i] = G->vertices_ordenados[N];
+        G->vertices[i]->posicion = i;
         return 0;
     }
     return 1;
@@ -318,19 +317,5 @@ u32 FijarPesoLadoConVecino(u32 j, u32 i, u32 p, Grafo G) {
         return UINT32_MAX;
     }
     G->vertices[i]->vecinos[j]->peso_u2v = p;
-    return 0;
-}
-
-int main() {
-    Grafo graph = ConstruccionDelGrafo();
-    // Grafo copito = CopiarGrafo(graph);
-    // FijarOrden(0,graph,2);
-    imprimir_grafo(graph);
-    // FijarColor(50,2,copito);
-    // imprimir_grafo(copito);
-    // printf("Orden vecino %u\n",OrdenVecino(0,1,graph));
-    // printf("color vecino: %u\n",ColorVecino(0,3,copito));
-    // DestruccionDelGrafo(copito);
-    DestruccionDelGrafo(graph);
     return 0;
 }
