@@ -6,36 +6,34 @@
 #include "RomaVictor.h"
 
 typedef struct Node_t *Node;
-typedef struct Tuple_t *Tuple;
 
-u32 height(Node N);
 /* Función utilitaria para obtener la altura del arbol */
+u32 height(Node N);
 
-Node newNode(u32 key);
 /*
     Función auxiliar que aloja memoria para un nuevo nodo, dada una llave y
     punteros NULL hacia izquierda y derecha
 */
+Node newNode(u32 key);
 
-Node rightRotate(Node y);
 /*  Función utilitaria para rotar un subarbol hacia la derecha */
+Node rightRotate(Node y);
 
-Node leftRotate(Node x);
 /*  Función utilitaria para rotar un subarbol hacia la izquierda */
+Node leftRotate(Node x);
 
-u32 getBalance(Node N);
 /* Obtener el factor de balance de un nodo N */
+u32 getBalance(Node N);
 
-Node insert(Node node, u32 key, Grafo G, u32 *position, u32 *pos_v);
 /*
     Función recursiva para insertar un nuevo Nodo en un subarbol "G",
    manteniendo el balance del mismo. Devuelve la nueva raíz del subarbol.
 */
+Node insert(Node node, u32 key, Grafo G, u32 *position, u32 *pos_v);
 
-void deleteTree(Node avl);
 /*  Elimina el árbol, liberando la memoria correspondiente al mismo */
+void deleteTree(Node avl);
 
-void avl_to_sorting_array(Node root, vertice *v, vertice **v_orden);
 /*
     Permite construir un arreglo ordenado basandose en la idea de un
     recorrido preorder para un AVL. Como cada nodo indica la posición de un
@@ -43,5 +41,6 @@ void avl_to_sorting_array(Node root, vertice *v, vertice **v_orden);
     árbol de manera ordenada, evitando así la complejidad de hacer un
     ordenamiento mediante algún algoritmo costoso.
 */
+void avl_to_sorting_array(Node root, vertice *v, vertice **v_orden);
 
 #endif
