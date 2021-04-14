@@ -45,4 +45,11 @@ inline u32 max(u32 a, u32 b) {
     return (a > b) ? a : b;
 }
 
+/* Intercambia los valores de dos punteros en u32 */
+inline void swap (u32 *a, u32 *b){
+    u32 temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
 #endif
