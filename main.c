@@ -3,7 +3,6 @@
 
 int main() {
     Grafo graph = ConstruccionDelGrafo();
-    imprimir_grafo(graph);
     DestruccionDelGrafo(graph);
     return 0;
 }

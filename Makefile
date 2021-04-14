@@ -2,7 +2,7 @@ CFLAGS = -Wall -Wextra -O3 -g -std=c99 -I -fsanitize=address,undefined
 CC = gcc
 TARGET = discreta_2
 OBJS = $(SRCS:.c=.o)
-SRCS = parte_1.c avl-tree.c main.c
+SRCS = parte_1.c  parte_2.c avl-tree.c main.c
 
 all: 	$(OBJS) 
 	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS) 
