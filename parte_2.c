@@ -4,8 +4,25 @@
 #include <stdlib.h>
 #include <string.h>
 
-u32 Greedy(Grafo G){
-    return ;
+u32 Greedy(Grafo G) {
+    FijarColor(0,0,G);
+    u32 max_color = 0;
+    for (u32 i = 1; i < NumeroDeVertices(G); i++) {
+        u32 color = 0;
+        for (u32 j = 0; j < Grado(i,G); j++) {
+            if (OrdenVecino(j, i, G) < i) {
+                if (ColorVecino(j, i, G) == color) {
+                    color++;
+                    j = -1;
+                }
+            }
+        }
+        if (color > max_color) {
+            max_color = color;
+        }
+        FijarColor(color, i, G);
+    }
+    return max_color + 1;
 }
 
 char Bipartito(Grafo G){
