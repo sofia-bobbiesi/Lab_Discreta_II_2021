@@ -2,19 +2,23 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
+// FIXME: al reiniciar el loop se revisan innecesariamente los vecinos varias veces 
 u32 Greedy(Grafo G) {
-    FijarColor(0,0,G);
+    u32 n_vertx = NumeroDeVertices(G);
     u32 max_color = 0;
-    for (u32 i = 1; i < NumeroDeVertices(G); i++) {
+    // El primer color siempre es 0, asignamos los siguientes
+    FijarColor(0,0,G);
+    for (u32 i = 1; i < n_vertx ; ++i) {
         u32 color = 0;
-        for (u32 j = 0; j < Grado(i,G); j++) {
-            if (OrdenVecino(j, i, G) < i) {
-                if (ColorVecino(j, i, G) == color) {
+        // Para cada vecino del vertice i
+        for (u32 j = 0; j < Grado(i,G); ++j) {
+            // Si el vecino estaba antes en el orden o si tiene el mismo color que 
+            // asignamos antes, cambio de color y reinicio el loop
+            if ((OrdenVecino(j, i, G) < i) && (ColorVecino(j, i, G) == color)){
                     color++;
-                    j = -1;
-                }
+                    j = -1; //si, esto hace que ++j=0 y reinicia el ciclo, pero recorre
+                            // muchas veces al pedo >:(
             }
         }
         if (color > max_color) {
@@ -22,12 +26,13 @@ u32 Greedy(Grafo G) {
         }
         FijarColor(color, i, G);
     }
+    // El maximo de colores + el color 0
     return max_color + 1;
 }
 
-char Bipartito(Grafo G){
-    return;
-}
+// char Bipartito(Grafo G){
+//    return;
+// }
 
 char AleatorizarVertices(Grafo G,u32 R){
     u32 n_vertx = NumeroDeVertices(G);
