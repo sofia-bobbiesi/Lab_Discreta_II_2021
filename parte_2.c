@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 // FIXME: al reiniciar el loop se revisan innecesariamente los vecinos varias veces 
 u32 Greedy(Grafo G) {
@@ -30,9 +31,73 @@ u32 Greedy(Grafo G) {
     return max_color + 1;
 }
 
-// char Bipartito(Grafo G){
-//    return;
-// }
+// Devuelve 1 si G es bipartito, 0 si no.
+/* char Bipartito(Grafo G){
+    u32 n_vertx = NumeroDeVertices(G);
+
+    for (u32 i = 0; i < n_vertx; i++) {
+        FijarColor(UINT32_MAX, i, G);
+    }
+    for(u32 i = 0; i < n_vertx; ++i){
+        u32 color_actual = i%2; //Solo permite dos colores, 0 y 1
+        if(Color(i,G) == UINT32_MAX){
+            FijarColor(color_actual, i, G);
+        }
+        u32 grado_vertice = Grado(i, G);
+        for(u32 j = 0; j < grado_vertice; ++j){  
+            u32 color_vecino = ColorVecino(j, i, G);
+            if(color_vecino == color_actual){
+                // FIXME
+                Greedy(G);
+                return 0; // No es bipartito
+            }
+            else if(color_vecino == UINT32_MAX){
+                // NOTE: probar si color_actual solito anda
+                color_actual == 0 ? FijarColor(1, j, G) : FijarColor(0, j, G);
+            }
+            // El tercer caso es que el color sea el opuesto al del vertice, por lo que no hago ninguna modificación
+        }
+    }
+   return 1;
+} */
+
+static void BFS(u32 i, Grafo G){
+    u32 v = i;
+    cola_circular cola = cola_vacia(NumeroDeVertices(G));
+    FijarColor(0, v, G);
+    encolar(cola, v);
+    while (!cola_esta_vacia(cola)) {
+        v = primero(cola);
+        decolar(cola);
+        for (u32 j = 0; j < Grado(v, G); j++) {
+            if (Color(OrdenVecino(j, v, G), G) == UINT32_MAX) {
+                FijarColor(1 - Color(v, G), OrdenVecino(j, v, G), G);
+                encolar(cola, OrdenVecino(j, v, G));
+            }
+        }
+    }
+    destruir_cola(cola);
+}
+
+
+char Bipartito(Grafo G)
+{
+    for (u32 i = 0; i < NumeroDeVertices(G); i++) {
+	    FijarColor(UINT32_MAX, i, G);
+    }
+    for (u32 i = 0; i < NumeroDeVertices(G); i++) {
+        if (Color(i, G) == 2) {
+            BFS(i, G); // DFS sería mejor?
+        }
+    }
+    if (!ChequeoColoreo(G)) {
+        for (u32 i = 0; i < NumeroDeVertices(G); i++) {
+            FijarColor(i, i, G);
+        }
+	    return 0;
+    }
+    return 1;
+}
 
 char AleatorizarVertices(Grafo G,u32 R){
     u32 n_vertx = NumeroDeVertices(G);
