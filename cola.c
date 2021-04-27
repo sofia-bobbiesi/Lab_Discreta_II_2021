@@ -16,7 +16,7 @@ queue newQueue(u32 size){
     pt->items = malloc(size * sizeof(u32));
     pt->maxsize = size;
     pt->front = 0;
-    pt->rear = -1; //FIXME: te odio u32 y tus no negativos :(
+    pt->rear = __UINT32_MAX__;
     pt->size = 0;
  
     return pt;
