@@ -23,7 +23,7 @@ queue newQueue(u32 size){
 }
 
 int isEmpty(queue pt){
-    return !size(pt);
+    return !(pt->size);
 }
 
 u32 front(queue pt){
@@ -35,7 +35,7 @@ u32 front(queue pt){
 }
  
 void enqueue(queue pt, u32 x){
-    if (size(pt) == pt->maxsize){
+    if ((pt->size) == pt->maxsize){
         printf("La cola está llena, no se pueden agregar más elementos.\n");
         exit(EXIT_FAILURE);
     }
