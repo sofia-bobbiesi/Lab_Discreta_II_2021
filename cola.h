@@ -10,7 +10,7 @@ typedef struct circular_queue *queue;
 queue newQueue(u32 size);
 
 // Devuelve si la cola pt está vacía, 1 si está vacía, 0 si no lo está
-int isEmpty(queue pt);
+int isEmptyQueue(queue pt);
 
 // Devuelve el primer elemento de la cola pt
 u32 front(queue pt);

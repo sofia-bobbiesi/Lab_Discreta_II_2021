@@ -1,5 +1,6 @@
 #include "cola.h"
 #include <stdlib.h>
+#include <stdint.h>
 #include <stdio.h>
 
 struct circular_queue{
@@ -16,46 +17,10 @@ queue newQueue(u32 size){
     pt->items = malloc(size * sizeof(u32));
     pt->maxsize = size;
     pt->front = 0;
-    pt->rear = __UINT32_MAX__;
+    pt->rear = UINT32_MAX;
     pt->size = 0;
  
     return pt;
-}
-
-int isEmpty(queue pt){
-    return !(pt->size);
-}
-
-u32 front(queue pt){
-    if (isEmpty(pt)){
-        printf("La cola está vacía, no se puede acceder.\n");
-        exit(EXIT_FAILURE);
-    } 
-    return pt->items[pt->front];
-}
- 
-void enqueue(queue pt, u32 x){
-    if ((pt->size) == pt->maxsize){
-        printf("La cola está llena, no se pueden agregar más elementos.\n");
-        exit(EXIT_FAILURE);
-    }
-
-    pt->rear = (pt->rear + 1) % pt->maxsize; // circular queue
-    pt->items[pt->rear] = x;
-    pt->size++;
- 
-    // printf("front = %d, rear = %d\n", pt->front, pt->rear);
-}
- 
-void dequeue(queue pt){
-    if (isEmpty(pt)){ // front == rear
-        printf("La cola está vacía, no se puede eliminar.\n");
-        exit(EXIT_FAILURE);
-    } 
-    pt->front = (pt->front + 1) % pt->maxsize;  // circular queue
-    pt->size--;
- 
-    //printf("front = %d, rear = %d\n", pt->front, pt->rear);
 }
 
 void deleteQueue(queue pt){
@@ -65,4 +30,38 @@ void deleteQueue(queue pt){
         }
         free(pt);
     }
+}
+
+int isEmptyQueue(queue pt){
+    return !(pt->size);
+}
+
+u32 front(queue pt){
+    if (isEmptyQueue(pt)){
+        printf("La cola está vacía, no se puede acceder.\n");
+        deleteQueue(pt);
+        return 0;
+    } 
+    return pt->items[pt->front];
+}
+ 
+void enqueue(queue pt, u32 x){
+    if ((pt->size) == pt->maxsize){
+        printf("La cola está llena, no se pueden agregar más elementos.\n");
+        deleteQueue(pt);
+        return;
+    }
+    pt->rear = (pt->rear + 1) % pt->maxsize; // circular queue
+    pt->items[pt->rear] = x;
+    pt->size++;
+}
+ 
+void dequeue(queue pt){
+    if (isEmptyQueue(pt)){ // front == rear
+        printf("La cola está vacía, no se puede eliminar.\n");
+        deleteQueue(pt);
+        return;
+    } 
+    pt->front = (pt->front + 1) % pt->maxsize;  // circular queue
+    pt->size--;
 }
