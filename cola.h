@@ -21,5 +21,6 @@ void enqueue(queue pt, u32 x);
 // Desencola el primer elemento de la cola pt
 void dequeue(queue pt);
 
-
+// Elimina la cola pt, liberando la memoria
+void deleteQueue(queue pt);
 #endif

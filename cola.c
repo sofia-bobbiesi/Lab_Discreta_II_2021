@@ -57,3 +57,12 @@ void dequeue(queue pt){
  
     //printf("front = %d, rear = %d\n", pt->front, pt->rear);
 }
+
+void deleteQueue(queue pt){
+    if (pt!=NULL){
+        if(pt->items!=NULL){
+            free(pt->items);
+        }
+        free(pt);
+    }
+}
