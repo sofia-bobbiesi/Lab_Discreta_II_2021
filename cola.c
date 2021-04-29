@@ -17,7 +17,7 @@ queue newQueue(u32 size){
     pt->items = malloc(size * sizeof(u32));
     pt->maxsize = size;
     pt->front = 0;
-    pt->rear = UINT32_MAX;
+    pt->rear = UINT32_MAX; // equivalente a poner -1, al sumarle 1 en enqueue se restablece a 0
     pt->size = 0;
  
     return pt;
