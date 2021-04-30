@@ -28,11 +28,18 @@ char AleatorizarVertices(Grafo G,u32 R);
 
 /* Funciones auxiliares */
 
-/* Intercambia los valores de dos punteros en u32 */
+// Intercambia los valores de dos punteros en u32.
 inline void swap (u32 *a, u32 *b){
     u32 temp = *a;
     *a = *b;
     *b = temp;
+}
+
+// Devuelve un grafo con sus vértices ordenados de manera creciente.
+inline void OrdenNatural(Grafo G){
+    for (u32 i = 0u; i < NumeroDeVertices(G); ++i){
+	    FijarOrden(i, G, i);
+    }
 }
 
 #endif
