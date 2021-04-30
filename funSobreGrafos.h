@@ -36,10 +36,11 @@ inline void swap (u32 *a, u32 *b){
 }
 
 // Devuelve un grafo con sus vértices ordenados de manera creciente.
-inline void OrdenNatural(Grafo G){
-    for (u32 i = 0u; i < NumeroDeVertices(G); ++i){
-	    FijarOrden(i, G, i);
-    }
-}
+void OrdenNatural(Grafo G);
+
+// Maximo para u32
+// inline u32 max(u32 a, u32 b) {
+//     return (a > b) ? a : b;
+// }
 
 #endif
