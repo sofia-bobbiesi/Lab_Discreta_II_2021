@@ -5,32 +5,31 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 
 // FIXME: al reiniciar el loop se revisan innecesariamente los vecinos varias veces 
-u32 Greedy(Grafo G) {
-    u32 n_vertx = NumeroDeVertices(G);
-    u32 max_color = 0;
-    // El primer color siempre es 0, asignamos los siguientes
-    FijarColor(0,0,G);
-    for (u32 i = 1; i < n_vertx ; ++i) {
-        u32 color = 0;
-        // Para cada vecino del vertice i
-        for (u32 j = 0; j < Grado(i,G); ++j) {
-            // Si el vecino estaba antes en el orden o si tiene el mismo color que 
-            // asignamos antes, cambio de color y reinicio el loop
-            if ((OrdenVecino(j, i, G) < i) && (ColorVecino(j, i, G) == color)){
-                    color++;
-                    j = -1; //si, esto hace que ++j=0 y reinicia el ciclo, pero recorre
-                            // muchas veces al pedo >:(
+u32 Greedy(Grafo G)
+{
+    u32 color = 1, color_vertice, n = NumeroDeVertices(G), grado, i, j, *colores_usados=(u32*)calloc(Delta(G), sizeof(u32));
+    for (i = 0; i < n; i++) {
+        color_vertice = 0;
+        grado = Grado(i, G);
+        if (grado) {
+            memset(colores_usados,0,grado);
+            for (j = 0; j < grado; j++) {
+            if (ColorVecino(j, i, G) < grado && OrdenVecino(j, i, G) < i)
+                colores_usados[ColorVecino(j, i, G)] = 1;
             }
+            while (colores_usados[color_vertice] && color_vertice < Grado(i, G)) {
+            color_vertice++;
+            }
+            if (color < color_vertice + 1)
+            color++;
         }
-        if (color > max_color) {
-            max_color = color;
-        }
-        FijarColor(color, i, G);
+        FijarColor(color_vertice, i, G);
     }
-    // El maximo de colores + el color 0
-    return max_color + 1;
+    free(colores_usados); 
+    return color;
 }
 
 static void BFS(Grafo G, u32 vertice){
