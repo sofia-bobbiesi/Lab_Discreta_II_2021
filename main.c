@@ -1,4 +1,3 @@
-#include "RomaVictor.h"
 #include "funSobreGrafos.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,10 +8,11 @@ int main() {
 
     char bip_check1 = Bipartito(graph);
 
+    OrdenNatural(graph);
     u32 coloreo = NumeroDeVertices(graph);
     u32 mejor_coloreo = coloreo;
-    for (int i = 0; i < 1000; i++){
-        AleatorizarVertices(graph,i);
+    for (int i = 0; i < 1; i++){
+        //AleatorizarVertices(graph,i);
         coloreo = Greedy(graph);
         if (coloreo < mejor_coloreo){
             mejor_coloreo = coloreo;
@@ -25,10 +25,10 @@ int main() {
     if (bip_check2 != bip_check1){
         printf("Hubo un error al hacer bipartito.");
     }
-    else if ((bip_check1 == bip_check2) == 1){
+    else if (bip_check1 == 1 && bip_check2 == 1){
         printf("El grafo es bipartito.");
     }
-    else if ((bip_check1 == bip_check2) == 0){
+    else if (bip_check1 == 0 && bip_check2 == 0){
         printf("El grafo no es bipartito.");
     }
 
