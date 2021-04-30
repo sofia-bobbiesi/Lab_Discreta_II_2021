@@ -1,3 +1,5 @@
+/*  Este archivo fue basado en el siguiente código:
+ https://www.techiedelight.com/circular-queue-implementation-c/ */
 #ifndef COLA_CIRCULAR_H
 #define COLA_CIRCULAR_H
 
