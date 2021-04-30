@@ -11,8 +11,8 @@ int main() {
     OrdenNatural(graph);
     u32 coloreo = NumeroDeVertices(graph);
     u32 mejor_coloreo = coloreo;
-    for (int i = 0; i < 1; i++){
-        //AleatorizarVertices(graph,i);
+    for (int i = 0; i < 1000; i++){
+        AleatorizarVertices(graph,i);
         coloreo = Greedy(graph);
         if (coloreo < mejor_coloreo){
             mejor_coloreo = coloreo;
