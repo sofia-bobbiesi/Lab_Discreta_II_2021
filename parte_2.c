@@ -7,29 +7,34 @@
 #include <stdbool.h>
 #include <string.h>
 
-// FIXME: al reiniciar el loop se revisan innecesariamente los vecinos varias veces 
-u32 Greedy(Grafo G)
-{
-    u32 color = 1, color_vertice, n = NumeroDeVertices(G), grado, i, j, *colores_usados=(u32*)calloc(Delta(G), sizeof(u32));
-    for (i = 0; i < n; i++) {
-        color_vertice = 0;
-        grado = Grado(i, G);
-        if (grado) {
-            memset(colores_usados,0,grado);
-            for (j = 0; j < grado; j++) {
-            if (ColorVecino(j, i, G) < grado && OrdenVecino(j, i, G) < i)
-                colores_usados[ColorVecino(j, i, G)] = 1;
-            }
-            while (colores_usados[color_vertice] && color_vertice < Grado(i, G)) {
-            color_vertice++;
-            }
-            if (color < color_vertice + 1)
-            color++;
-        }
-        FijarColor(color_vertice, i, G);
+u32 Greedy(Grafo G){
+    u32 color = 0, max_color = 0;
+    u32 n_vertx = NumeroDeVertices(G);
+    u32 k;
+    bool *colores_usados = calloc(n_vertx, sizeof(u32)); // 0 es disponible, 1 es usado
+    // Decolarar los vértices asignándole UINT32_MAX
+    for (u32 i = 0; i < n_vertx; i++){ 
+        FijarColor(UINT32_MAX, i, G);
     }
-    free(colores_usados); 
-    return color;
+
+    for (u32 v = 0u; v < n_vertx; ++v){
+        for (u32 w = 0u; w < Grado(v, G); ++w){
+            color = ColorVecino(w, v, G);
+            // Si el vértice ya está coloreado, marco el color como usado
+            if (color < UINT32_MAX){
+                colores_usados[color] = 1;
+            }       
+        }
+        // Busco el color mínimo que no haya sido asignado aún
+        for(k = 0u; colores_usados[k] != 0; ++k);
+        FijarColor(k, v, G);
+        max_color = max(k, max_color);
+        // Reseteo los colores usados para el próximo vértice
+        memset(colores_usados, 0, n_vertx);
+    }
+    free(colores_usados);
+    // El maximo de colores + el color 0
+    return max_color + 1;
 }
 
 static void BFS(Grafo G, u32 vertice){
@@ -49,7 +54,7 @@ static void BFS(Grafo G, u32 vertice){
     deleteQueue(cola);
 }
 
-static int ChequeoColoreoPropio(Grafo G){
+static char ChequeoColoreoPropio(Grafo G){
     u32 n_vertx = NumeroDeVertices(G);
     for(u32 i = 0; i < n_vertx; ++i) {
         for (u32 j = 0; j < Grado(i, G); ++j){
@@ -107,9 +112,10 @@ char AleatorizarVertices(Grafo G,u32 R){
         Algoritmo de Fisher-Yates limitado al R dado. El mismo permite 
         recorrer toda una selección de forma aleatoria una sola vez.
     */
-    for (int i = n_vertx-1; i > 0; --i){
+   int j;
+    for (u32 i = n_vertx-1; i > 0; --i){
         // Elige un índice aleatorio de 0 a i.
-        int j = rand() % (i+1);
+        j = rand() % (i+1);
         // Intercambia arr[i] con el elemento en el índice aleatorio.
         swap(&orden_aleatorio[i], &orden_aleatorio[j]);
     }
@@ -125,4 +131,10 @@ char AleatorizarVertices(Grafo G,u32 R){
     }
     free(orden_aleatorio);
     return check;
+}
+
+void OrdenNatural(Grafo G){
+    for (u32 i = 0u; i < NumeroDeVertices(G); ++i){
+	    FijarOrden(i, G, i);
+    }
 }
