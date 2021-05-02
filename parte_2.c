@@ -10,15 +10,17 @@ u32 Greedy(Grafo G){
     u32 color = 0, max_color = 0;
     u32 n_vertx = NumeroDeVertices(G);
     u32 k;
-    bool *colores_usados = calloc(n_vertx, sizeof(u32)); // 0 es disponible, 1 es usado
+    u32 *colores = calloc(n_vertx, sizeof(u32));
+    bool *colores_usados = calloc(Delta(G)+1, sizeof(bool)); // 0 es disponible, 1 es usado
     // Decolarar los vértices asignándole UINT32_MAX
     for (u32 i = 0; i < n_vertx; i++){ 
-        FijarColor(UINT32_MAX, i, G);
+        colores[i] = UINT32_MAX;
     }
 
     for (u32 v = 0u; v < n_vertx; ++v){
-        for (u32 w = 0u; w < Grado(v, G); ++w){
-            color = ColorVecino(w, v, G);
+        u32 grado = Grado(v, G);
+        for (u32 w = 0u; w < grado; ++w){
+            color = colores[OrdenVecino(w,v,G)];
             // Si el vértice ya está coloreado, marco el color como usado
             if (color < UINT32_MAX){
                 colores_usados[color] = 1;
@@ -27,10 +29,12 @@ u32 Greedy(Grafo G){
         // Busco el color mínimo que no haya sido asignado aún
         for(k = 0u; colores_usados[k] != 0; ++k);
         FijarColor(k, v, G);
+        colores[v] = k;
         max_color = max(k, max_color);
         // Reseteo los colores usados para el próximo vértice
-        memset(colores_usados, 0, n_vertx);
+        memset(colores_usados, 0, Delta(G)+1);
     }
+    free(colores);
     free(colores_usados);
     // El maximo de colores + el color 0
     return max_color + 1;
