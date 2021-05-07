@@ -50,5 +50,6 @@ Thumbs.db
 .vscode/*
 *.txt
 *.o
+*.txt
 *.pdf
 *!.c
