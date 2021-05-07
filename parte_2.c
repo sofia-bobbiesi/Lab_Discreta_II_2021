@@ -133,14 +133,13 @@ char AleatorizarVertices(Grafo G,u32 R){
 }
 
 char permutacion(u32 *arr, u32 N) {
-    u32 *hash = calloc(N + 1, sizeof(u32));
-  
+    u32 *hash = calloc(N, sizeof(u32));
     // Cuenta la frecuencia
     for (u32 i = 0; i < N; ++i) {
         hash[arr[i]]++;
     }
     // Verifica que la frecuencia sea 1
-    for (u32 i = 1; i <= N; i++) {
+    for (u32 i = 0; i < N; i++) {
         if (hash[i] != 1)
             return 0; // No es una permutación
     }
