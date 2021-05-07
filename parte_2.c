@@ -1,5 +1,4 @@
-#include "RomaVictor.h"
-#include "funSobreGrafos.h"
+#include "UnleashHell.h"
 #include "cola.h"
 #include <stdint.h>
 #include <stdio.h>
@@ -132,6 +131,32 @@ char AleatorizarVertices(Grafo G,u32 R){
     free(orden_aleatorio);
     return check;
 }
+
+char permutacion(u32 *arr, u32 N) {
+    u32 *hash = calloc(N + 1, sizeof(u32));
+  
+    // Cuenta la frecuencia
+    for (u32 i = 0; i < N; ++i) {
+        hash[arr[i]]++;
+    }
+    // Verifica que la frecuencia sea 1
+    for (u32 i = 1; i <= N; i++) {
+        if (hash[i] != 1)
+            return 0; // No es una permutación
+    }
+    return 1; // Es una permutación
+}
+
+char OrdenPorBloqueDeColores(Grafo G,u32* perm){
+    u32 len_perm = sizeof(perm)/sizeof(perm[0]);
+    if (len_perm > NumeroDeVertices(G) || permutacion(perm, len_perm) == 0){
+        return 0; // No es una perm válida
+    }
+    // Si es una perm -> ordena los vertices segun colores 
+
+    return 1; //fue una permutacion válida
+}
+
 
 void OrdenNatural(Grafo G){
     for (u32 i = 0u; i < NumeroDeVertices(G); ++i){

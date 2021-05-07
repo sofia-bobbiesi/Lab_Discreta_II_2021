@@ -27,9 +27,10 @@ char Bipartito(Grafo G);
 char AleatorizarVertices(Grafo G,u32 R);
 
 
-/* Ordena los vertices por colores, poniendo los vertices 
-de color perm[0] primero, luego los de color perm[1], etc...*/
-
+/*
+    Ordena los vertices por colores, poniendo los vertices 
+    de color perm[0] primero, luego los de color perm[1], etc...
+*/
 char OrdenPorBloqueDeColores(Grafo G,u32* perm);
 
 /* Funciones auxiliares */
@@ -48,5 +49,8 @@ void OrdenNatural(Grafo G);
 // inline u32 max(u32 a, u32 b) {
 //     return (a > b) ? a : b;
 // }
+
+// Comprueba si un arreglo representa una permutación o no
+char permutacion(u32 *arr, u32 N);
 
 #endif
