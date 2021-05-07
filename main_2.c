@@ -1,9 +1,9 @@
-#include "funSobreGrafos.h"
+#include "UnleashHell.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
 
-int main() {
+int main2() {
     Grafo grafo = ConstruccionDelGrafo();
     Grafo grafo_copia = CopiarGrafo(grafo);
 
