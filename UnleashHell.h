@@ -1,8 +1,8 @@
-#ifndef FUN_SOBRE_GRAFOS_H
-#define FUN_SOBRE_GRAFOS_H
+#ifndef __uh_H
+#define __uh_H
 
 #include "RomaVictor.h"
-/* Funciones sobre grafos */
+/* Funciones sobre grafos de las partes 2 y 3 */
 
 /* 
     Corre greedy en G comenzando con el color 0, con el orden 
@@ -25,6 +25,12 @@ char Bipartito(Grafo G);
     algun problema.
 */
 char AleatorizarVertices(Grafo G,u32 R);
+
+
+/* Ordena los vertices por colores, poniendo los vertices 
+de color perm[0] primero, luego los de color perm[1], etc...*/
+
+char OrdenPorBloqueDeColores(Grafo G,u32* perm);
 
 /* Funciones auxiliares */
 
