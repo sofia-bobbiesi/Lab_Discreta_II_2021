@@ -146,13 +146,33 @@ char permutacion(u32 *arr, u32 N) {
     return 1; // Es una permutación
 }
 
-char OrdenPorBloqueDeColores(Grafo G,u32* perm){
+char OrdenPorBloqueDeColores(Grafo G,u32* perm) {
     u32 len_perm = sizeof(perm)/sizeof(perm[0]);
-    if (len_perm > NumeroDeVertices(G) || permutacion(perm, len_perm) == 0){
+    u32 max_color = 0;
+    
+    u32 *orden_bloques = calloc(NumeroDeVertices(G), sizeof(u32));
+    // Busco el color máximo del grafo
+    for (u32 i = 0u; i < NumeroDeVertices(G); ++i) {
+        orden_bloques[i] = i;
+        if (Color(i,G) > max_color){
+            max_color = Color(i,G);
+        }
+    }
+
+    if ( max_color != len_perm-1 || permutacion(perm, len_perm) == 0) {
         return 0; // No es una perm válida
     }
+    
     // Si es una perm -> ordena los vertices segun colores 
+    for(u32 i = 0u; perm[i] != ; ++i){ //recorro todos los colores
+        // Ordene según colores :c
+    }
 
+    for (u32 i = 0u; i < NumeroDeVertices(G); ++i) {
+        FijarOrden(i, G, orden_bloques[i]); //ordenar al final con las posiciones ordenas en bloque
+    }
+    
+    free(orden_bloques);
     return 1; //fue una permutacion válida
 }
 
