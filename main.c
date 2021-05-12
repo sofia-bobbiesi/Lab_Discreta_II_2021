@@ -6,6 +6,11 @@
 int main() {
     Grafo graph = ConstruccionDelGrafo();
 
+    // Greedy(graph);
+
+    // u32 perm[4] = {3,2,0,1};
+    // OrdenPorBloqueDeColores(graph,perm);
+    // imprimir_grafo(graph);
     char bip_check1 = Bipartito(graph);
 
     OrdenNatural(graph);

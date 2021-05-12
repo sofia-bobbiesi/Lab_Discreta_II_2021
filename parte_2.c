@@ -132,53 +132,85 @@ char AleatorizarVertices(Grafo G,u32 R){
     return check;
 }
 
+void OrdenNatural(Grafo G){
+    for (u32 i = 0u; i < NumeroDeVertices(G); ++i){
+	    FijarOrden(i, G, i);
+    }
+}
+
 char permutacion(u32 *arr, u32 N) {
     u32 *hash = calloc(N, sizeof(u32));
-    // Cuenta la frecuencia
+    // Cuenta la frecuencia de colores
     for (u32 i = 0; i < N; ++i) {
         hash[arr[i]]++;
     }
     // Verifica que la frecuencia sea 1
     for (u32 i = 0; i < N; i++) {
-        if (hash[i] != 1)
-            return 0; // No es una permutación
+        if (hash[i] != 1) {
+            return 0;
+        }
     }
-    return 1; // Es una permutación
+    free(hash);
+    return 1;
 }
 
-char OrdenPorBloqueDeColores(Grafo G,u32* perm) {
-    u32 len_perm = sizeof(perm)/sizeof(perm[0]);
+u32 MaxColor(Grafo G){
     u32 max_color = 0;
-    
-    u32 *orden_bloques = calloc(NumeroDeVertices(G), sizeof(u32));
-    // Busco el color máximo del grafo
     for (u32 i = 0u; i < NumeroDeVertices(G); ++i) {
-        orden_bloques[i] = i;
         if (Color(i,G) > max_color){
             max_color = Color(i,G);
         }
     }
-
-    if ( max_color != len_perm-1 || permutacion(perm, len_perm) == 0) {
-        return 0; // No es una perm válida
-    }
-    
-    // Si es una perm -> ordena los vertices segun colores 
-    for(u32 i = 0u; perm[i] != ; ++i){ //recorro todos los colores
-        // Ordene según colores :c
-    }
-
-    for (u32 i = 0u; i < NumeroDeVertices(G); ++i) {
-        FijarOrden(i, G, orden_bloques[i]); //ordenar al final con las posiciones ordenas en bloque
-    }
-    
-    free(orden_bloques);
-    return 1; //fue una permutacion válida
+    return max_color;
 }
 
-
-void OrdenNatural(Grafo G){
-    for (u32 i = 0u; i < NumeroDeVertices(G); ++i){
-	    FijarOrden(i, G, i);
+char OrdenPorBloqueDeColores(Grafo G, u32 *perm) {
+    u32 n_vertx = NumeroDeVertices(G);
+    // La permutación tiene exactamente r colores.
+    u32 len_perm = MaxColor(G) + 1;
+    // Chequeo que para r colores exista una permutación
+    if (permutacion(perm, len_perm) == 0) {
+        return 0; // No es una perm válida
     }
+    // Conviene tener los vértices ordenados para luego orden por bloques
+    OrdenNatural(G);
+    // Cuenta la frecuencia de colores de los vertices
+    u32 *freq = calloc(len_perm, sizeof(u32));
+    for (u32 i = 0u; i < n_vertx; ++i) {
+        freq[Color(i,G)]++;
+    }
+    /* 
+        Creo un collection de tamaño r * freq[i],(i entre 0 y r) donde se 
+        guardarán las posiciones que tienen el color correspondiente a perm[i]
+    */
+    u32 **hash = calloc(len_perm,sizeof(u32*)); 	
+	for (u32 i = 0u; i < len_perm; ++i) {
+		hash[i] = calloc(freq[i],sizeof(u32));
+    }
+
+    // Arreglo de consulta para llenar la matriz en las posiciones correctas
+    u32 *posiciones = calloc(len_perm,sizeof(u32));
+    u32 color = 0;
+
+    for (u32 i = 0u; i < n_vertx; ++i) {
+        color = Color(i,G);
+        hash[color][posiciones[color]] = i;
+        posiciones[color]++;
+    }
+    
+    u32 k = 0;
+    for (u32 i = 0u; i < len_perm; ++i) {
+        for (u32 j = 0u; j < freq[perm[i]]; ++j){
+            FijarOrden(k,G,hash[perm[i]][j]);
+            k++;
+        }
+    }
+    //Libero la memoria usada
+	for (u32 i = 0u; i<len_perm; ++i) {
+		free(hash[i]);
+    }
+    free(hash);
+    free(freq);
+    free(posiciones);
+    return 1;
 }
