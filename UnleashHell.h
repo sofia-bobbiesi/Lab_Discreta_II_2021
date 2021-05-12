@@ -50,7 +50,16 @@ void OrdenNatural(Grafo G);
 //     return (a > b) ? a : b;
 // }
 
-// Comprueba si un arreglo representa una permutación o no
+/*
+    Comprueba si un arreglo representa una permutación o no, 0 si no es
+    una permutación, 1 si lo es.
+*/
 char permutacion(u32 *arr, u32 N);
+
+/*
+    Devuelve el maximo color con el que fue coloreado alguno 
+    de los vértices para un grafo dado G
+*/
+u32 MaxColor(Grafo G);
 
 #endif
