@@ -191,14 +191,17 @@ char OrdenPorBloqueDeColores(Grafo G, u32 *perm) {
 	for (u32 i = 0u; i < len_perm; ++i) {
 		hash[i] = calloc(freq[i],sizeof(u32));
     }
-    // Arreglo de consulta para llenar la matriz en las posiciones correctas
-    u32 *posiciones = calloc(len_perm,sizeof(u32));
+    /*
+        Reseto el arreglo para usarlo de consulta al llenar la collection
+        en las posiciones correctas
+    */
+    memset(freq,0,len_perm*sizeof(u32));
     u32 color = 0;
 
     for (u32 i = 0u; i < n_vertx; ++i) {
         color = Color(i,G);
-        hash[color][posiciones[color]] = i;
-        posiciones[color]++;
+        hash[color][freq[color]] = i;
+        freq[color]++;
     }
     // Agrupo los vertices en el orden de los colores dados por perm
     u32 k = 0;
@@ -214,6 +217,5 @@ char OrdenPorBloqueDeColores(Grafo G, u32 *perm) {
     }
     free(hash);
     free(freq);
-    free(posiciones);
     return 1;
 }
