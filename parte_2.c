@@ -140,18 +140,22 @@ void OrdenNatural(Grafo G){
 
 char permutacion(u32 *arr, u32 N) {
     u32 *hash = calloc(N, sizeof(u32));
+    u32 es_perm = 1;
     // Cuenta la frecuencia de colores
     for (u32 i = 0; i < N; ++i) {
+        if (arr[i] >= N){
+            es_perm = 0;
+            break;
+        }
         hash[arr[i]]++;
-    }
-    // Verifica que la frecuencia sea 1
-    for (u32 i = 0; i < N; i++) {
-        if (hash[i] != 1) {
-            return 0;
+        // Verifica que la frecuencia sea 1
+        if (hash[arr[i]] != 1) {
+            es_perm = 0;
+            break;
         }
     }
     free(hash);
-    return 1;
+    return es_perm;
 }
 
 u32 MaxColor(Grafo G){
