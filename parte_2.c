@@ -138,7 +138,7 @@ void OrdenNatural(Grafo G){
     }
 }
 
-char permutacion(u32 *arr, u32 N) {
+char esPermutacion(u32 *arr, u32 N) {
     u32 *hash = calloc(N, sizeof(u32));
     u32 es_perm = 1;
     // Cuenta la frecuencia de colores
@@ -173,8 +173,8 @@ char OrdenPorBloqueDeColores(Grafo G, u32 *perm) {
     // La permutación tiene exactamente r colores.
     u32 len_perm = MaxColor(G) + 1;
     // Chequeo que para r colores exista una permutación
-    if (permutacion(perm, len_perm) == 0) {
-        return 0; // No es una perm válida
+    if (!esPermutacion(perm, len_perm)) {
+        return 0;
     }
     // Conviene tener los vértices ordenados para luego orden por bloques
     OrdenNatural(G);
@@ -191,7 +191,6 @@ char OrdenPorBloqueDeColores(Grafo G, u32 *perm) {
 	for (u32 i = 0u; i < len_perm; ++i) {
 		hash[i] = calloc(freq[i],sizeof(u32));
     }
-
     // Arreglo de consulta para llenar la matriz en las posiciones correctas
     u32 *posiciones = calloc(len_perm,sizeof(u32));
     u32 color = 0;
@@ -201,7 +200,7 @@ char OrdenPorBloqueDeColores(Grafo G, u32 *perm) {
         hash[color][posiciones[color]] = i;
         posiciones[color]++;
     }
-    
+    // Agrupo los vertices en el orden de los colores dados por perm
     u32 k = 0;
     for (u32 i = 0u; i < len_perm; ++i) {
         for (u32 j = 0u; j < freq[perm[i]]; ++j){

@@ -51,10 +51,10 @@ void OrdenNatural(Grafo G);
 // }
 
 /*
-    Comprueba si un arreglo representa una permutación o no, 0 si no es
-    una permutación, 1 si lo es.
+    Dado un arreglo y su longitud, comprueba si el arreglo representa una
+    permutación o no, 0 si no es una permutación, 1 si lo es.
 */
-char permutacion(u32 *arr, u32 N);
+char esPermutacion(u32 *arr, u32 N);
 
 /*
     Devuelve el maximo color con el que fue coloreado alguno 
