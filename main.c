@@ -3,40 +3,63 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-int main() {
-    Grafo graph = ConstruccionDelGrafo();
+int main(int argc, char *argv[]) {
+    // Inciso 1
+    if(argc != 7){
+        fprintf(stderr,"ERROR: Formato inválido\n");
+        fprintf(stderr,"Cerrando el programa...\n");
+        exit(1);
+    }
+    int a = atoi(argv[1]);
+    int b = atoi(argv[2]);
+    int c = atoi(argv[3]);
+    int d = atoi(argv[4]);
+    int e = atoi(argv[5]);
+    int f = atoi(argv[6]);
 
-    // Greedy(graph);
+    Grafo G = ConstruccionDelGrafo();
+    if(G == NULL){
+        fprintf(stderr,"ERROR: No se pudo cargar el grafo\n");
+        fprintf(stderr,"Cerrando el programa...\n");
+        exit(1);
+    }
+    // Inciso 2
+    u32 n_vertx = NumeroDeVertices(G);
+    printf("Número de vértices para G: %u\n",n_vertx);
+    printf("Número de lados para G: %u\n",NumeroDeLados(G));
+    printf("Delta de G: %u\n",Delta(G));
 
-    // u32 perm[4] = {3,2,0,1};
-    // OrdenPorBloqueDeColores(graph,perm);
-    // imprimir_grafo(graph);
-    char bip_check1 = Bipartito(graph);
-
-    OrdenNatural(graph);
-    u32 coloreo = NumeroDeVertices(graph);
-    u32 mejor_coloreo = coloreo;
-    for (int i = 0; i < 1000; i++){
-        AleatorizarVertices(graph,i);
-        coloreo = Greedy(graph);
-        if (coloreo < mejor_coloreo){
-            mejor_coloreo = coloreo;
+    // Inciso 3
+    if(Bipartito(G)){
+        fprintf(stderr,"El grafo G es bipartito\n");
+        fprintf(stderr,"Cerrando el programa...\n");
+        exit(0);
+    }
+    printf("El grafo G NO es bipartito\n");
+    // Inciso 4-5
+    OrdenNatural(G);
+    u32 color = 0;
+    u32 mejor_color = n_vertx;
+    u32 mejor_semilla = 0;
+    for (int i = 0; i <= a; ++i){
+        AleatorizarVertices(G,f+i);
+        color = Greedy(G);
+        printf("El coloreo fue de %u colores\n",color);
+        if(color < mejor_color){
+            mejor_color = color;
+            mejor_semilla = f+i;
         }
     }
-    printf("El mejor coloreo con greedy fue de %u colores.\n",mejor_coloreo);
-
-    char bip_check2 = Bipartito(graph);
-
-    if (bip_check2 != bip_check1){
-        printf("Hubo un error al hacer bipartito.");
+    if(mejor_semilla != f + a) {
+        AleatorizarVertices(G,mejor_semilla);
+        Greedy(G);
     }
-    else if (bip_check1 == 1 && bip_check2 == 1){
-        printf("El grafo es bipartito.");
-    }
-    else if (bip_check1 == 0 && bip_check2 == 0){
-        printf("El grafo no es bipartito.");
-    }
+    printf("El mejor coloreo fue en %u colores para la semilla: %u\n",mejor_color,mejor_semilla);
+    // Inciso 6
 
-    DestruccionDelGrafo(graph);
+    // Inciso 7
+
+    // Inciso 8
+    DestruccionDelGrafo(G);
     return 0;
 }
