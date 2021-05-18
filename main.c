@@ -3,17 +3,14 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-static void RandomizarPermutaciones(u32* perm, u32 len, u32 R){
+void RandomizarPermutaciones(u32* perm, u32 len, u32 R){
     // Inicializa los indices en [0 ... len-1]
     for (u32 i = 0u; i < len; ++i){
         perm[i] = i;
     }
     // Establece la semilla que rand() usará para generar números pseudo-aleatorios.
     srand(R); 
-    /*
-        Algoritmo de Fisher-Yates limitado al R dado. El mismo permite 
-        recorrer toda una selección de forma aleatoria una sola vez.
-    */
+    // Algoritmo de Fisher-Yates limitado al R dado.
    int j;
     for (u32 i = len-1; i > 0; --i){
         // Elige un índice aleatorio de 0 a i.
@@ -34,7 +31,7 @@ int main(int argc, char *argv[]) {
     int b = atoi(argv[2]);
     int c = atoi(argv[3]);
     int d = atoi(argv[4]);
-    int e = atoi(argv[5]);
+    //float e = atoi(argv[5]);
     int f = atoi(argv[6]);
 
     Grafo G = ConstruccionDelGrafo();
@@ -63,7 +60,7 @@ int main(int argc, char *argv[]) {
     u32 color = Greedy(G);
     superGridito++;
     u32 mejor_color_G = color;
-    printf("El coloreo fue de %u colores\n",color);
+    printf("El coloreo fue de %u colores para el orden natural\n",color);
     int mejor_semilla = f;
     for (int i = 0; i < a; ++i) {
         AleatorizarVertices(G,f+i);
@@ -84,7 +81,7 @@ int main(int argc, char *argv[]) {
     printf("El mejor coloreo fue en %u colores para la semilla: %u\n", mejor_color_G, mejor_semilla);
     
     // Inciso 6
-    u32 *perm = calloc(mejor_color_G+1, sizeof(u32)); // NOTE: Hace falta que sea con calloc?
+    u32 *perm = calloc(mejor_color_G, sizeof(u32));
     for (int i = 0; i < b; ++i) {
         RandomizarPermutaciones(perm,mejor_color_G,f+i);
         OrdenPorBloqueDeColores(G,perm);
@@ -97,6 +94,7 @@ int main(int argc, char *argv[]) {
             free(perm);
             fprintf(stderr,"Te fuiste al orto perry, aprende a programar\n");
             fprintf(stderr,"Cerrando el programa...\n");
+            free(perm);
             DestruccionDelGrafo(G);
             exit(1);
         }
@@ -107,47 +105,63 @@ int main(int argc, char *argv[]) {
     u32 SuperColor = 0;
     for (int i = 0; i < c; ++i) {
         // G en cada corrida va a tener el grafo con mejor coloreo
+        // NOTE: capaz habría que hacer un realloc o volver a crear perm
         Grafo H = CopiarGrafo(G);
         Grafo W = CopiarGrafo(G);
         for (int j = 0; j < d; ++j) {
-            // Digievoluciones
-            // Curso de nivelacion A:
-            //(a) Uno de los grafos continuará evolucionando como antes, ordenando los colores aleatoriamente.
+            // Estrategia A:
             RandomizarPermutaciones(perm,mejor_color_G,f+j);
             OrdenPorBloqueDeColores(G,perm);
             mejor_color_G = Greedy(G);
             superGridito++;     
-            // Egreso de Famaf B:
-            //(b) Otro de los grafos ordenará siempre los colores de mayor a menor.
-            for (u32 i = 0; i < mejor_color_H; ++i){
-                perm[i] = mejor_color_H-i-1;
+
+            // Estrategia B:
+            for (u32 k = 0; k < mejor_color_H; ++k){
+                perm[k] = mejor_color_H-k-1;
             }
             OrdenPorBloqueDeColores(H,perm);
             mejor_color_H = Greedy(H);
             superGridito++;
-            // Maestria en C:
+
             /* (c) El tercero ordenará los colores de mayor a menor y luego cambiara aleatoria-
                     mente de lugar ALGUNAS de sus entradas solamente. Para ello mirará cada
                     entrada y con probabilidad 1/e la intercambiará con otra elegida al azar. */
-                    
-            printf("El coloreo obtenido fue de G: %u, H: %u, W: %u colores", mejor_color_G, mejor_color_H, mejor_color_W);
+        //     u32 idx_rand = 0;
+        //     float prob = 0;
+        //     srand(f);
+        //     for (u32 k = 0; k < mejor_color_W; ++k) {
+        //         idx_rand = rand() % mejor_color_W;
+        //         prob = 1/idx_rand;
+        //         if (prob == 1/e) {
+        //             printf("PROBABILIDAD: %f %f\n",prob, 1/e);
+        //             swap(&perm[k],&perm[idx_rand]);
+        //         }
+        //         OrdenPorBloqueDeColores(W,perm);
+        //         mejor_color_W = Greedy(W);
+        //         superGridito++;
+        //     }
+            printf("El coloreo obtenido fue de G: %u, H: %u, W: %u colores\n", mejor_color_G, mejor_color_H, mejor_color_W);
         }
         // Pelea de grafos
         SuperColor = min(min(mejor_color_G, mejor_color_H), mejor_color_W);
         if (SuperColor == mejor_color_H) {
             DestruccionDelGrafo(G);
             G = CopiarGrafo(H);
+            mejor_color_G = mejor_color_H;
         }
         else if (SuperColor == mejor_color_W) {
             DestruccionDelGrafo(G);
             G = CopiarGrafo(W);
+            mejor_color_G = mejor_color_W;
         }
         DestruccionDelGrafo(H);
         DestruccionDelGrafo(W);
+        mejor_color_H = mejor_color_G;
+        mejor_color_W = mejor_color_G;
     }
     // Inciso 8
-    //printf("El último coloreo obtenido fue de %u colores", ????);
-    printf("Se realizaron %u coloreos con Greedy", superGridito);
+    printf("\nEl último coloreo obtenido fue de %u colores\n", mejor_color_G);
+    printf("Se realizaron %u coloreos con Greedy\n", superGridito);
 
     free(perm);
     DestruccionDelGrafo(G);
