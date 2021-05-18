@@ -62,7 +62,7 @@ int main(int argc, char *argv[]) {
     OrdenNatural(G);
     u32 color = Greedy(G);
     superGridito++;
-    u32 mejor_color = color;
+    u32 mejor_color_G = color;
     printf("El coloreo fue de %u colores\n",color);
     int mejor_semilla = f;
     for (int i = 0; i < a; ++i) {
@@ -70,30 +70,30 @@ int main(int argc, char *argv[]) {
         color = Greedy(G);
         superGridito++;
         printf("El coloreo fue de %u colores\n",color);
-        if(color < mejor_color){
-            mejor_color = color;
+        if(color < mejor_color_G){
+            mejor_color_G = color;
             mejor_semilla = f+i;
         }
     }
     // Si la mejor semilla no fue la última, vuelvo a ordenar
     if(mejor_semilla != f+a-1) {
         AleatorizarVertices(G,mejor_semilla);
-        mejor_color = Greedy(G);
+        mejor_color_G = Greedy(G);
         superGridito++;
     }
-    printf("El mejor coloreo fue en %u colores para la semilla: %u\n",mejor_color,mejor_semilla);
+    printf("El mejor coloreo fue en %u colores para la semilla: %u\n", mejor_color_G, mejor_semilla);
     
     // Inciso 6
-    u32 *perm = calloc(mejor_color,sizeof(u32)); // NOTE: Hace falta que sea con calloc?
+    u32 *perm = calloc(mejor_color_G+1, sizeof(u32)); // NOTE: Hace falta que sea con calloc?
     for (int i = 0; i < b; ++i) {
-        RandomizarPermutaciones(perm,mejor_color,f+i);
+        RandomizarPermutaciones(perm,mejor_color_G,f+i);
         OrdenPorBloqueDeColores(G,perm);
-        color = mejor_color;
-        mejor_color = Greedy(G);
+        color = mejor_color_G;
+        mejor_color_G = Greedy(G);
         superGridito++;
         printf("El coloreo fue de %u colores\n", color);
         // Esto en teoría no va, pero viste, uno nunca sabe
-        if(mejor_color > color){
+        if(mejor_color_G > color){
             free(perm);
             fprintf(stderr,"Te fuiste al orto perry, aprende a programar\n");
             fprintf(stderr,"Cerrando el programa...\n");
@@ -102,9 +102,8 @@ int main(int argc, char *argv[]) {
         }
     }
     // Inciso 7
-    u32 mejor_color_G = mejor_color;
-    u32 mejor_color_H = mejor_color;
-    u32 mejor_color_W = mejor_color;
+    u32 mejor_color_H = mejor_color_G;
+    u32 mejor_color_W = mejor_color_G;
     u32 SuperColor = 0;
     for (int i = 0; i < c; ++i) {
         // G en cada corrida va a tener el grafo con mejor coloreo
@@ -114,7 +113,7 @@ int main(int argc, char *argv[]) {
             // Digievoluciones
             // Curso de nivelacion A:
             //(a) Uno de los grafos continuará evolucionando como antes, ordenando los colores aleatoriamente.
-            RandomizarPermutaciones(perm,mejor_color,f+j);
+            RandomizarPermutaciones(perm,mejor_color_G,f+j);
             OrdenPorBloqueDeColores(G,perm);
             mejor_color_G = Greedy(G);
             superGridito++;     
