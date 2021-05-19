@@ -1,4 +1,5 @@
 #include "UnleashHell.h"
+#include "auxiliares.h"
 #include "cola.h"
 #include <stdint.h>
 #include <stdio.h>
@@ -57,9 +58,8 @@ static void BFS(Grafo G, u32 vertice){
     deleteQueue(cola);
 }
 
-static char ChequeoColoreoPropio(Grafo G){
-    u32 n_vertx = NumeroDeVertices(G);
-    for(u32 i = 0; i < n_vertx; ++i) {
+char ChequeoColoreoPropio(Grafo G){
+    for(u32 i = 0; i < NumeroDeVertices(G); ++i) {
         for (u32 j = 0; j < Grado(i, G); ++j){
             if(Color(i, G) == ColorVecino(j, i, G)){
                 return 0;

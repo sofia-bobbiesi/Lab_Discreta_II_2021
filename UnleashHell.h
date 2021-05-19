@@ -33,33 +33,5 @@ char AleatorizarVertices(Grafo G,u32 R);
 */
 char OrdenPorBloqueDeColores(Grafo G,u32* perm);
 
-/* Funciones auxiliares */
-
-// Intercambia los valores de dos punteros en u32.
-inline void swap (u32 *a, u32 *b){
-    u32 temp = *a;
-    *a = *b;
-    *b = temp;
-}
-
-// Devuelve un grafo con sus vértices ordenados de manera creciente.
-void OrdenNatural(Grafo G);
-
-// Maximo para u32
-// inline u32 max(u32 a, u32 b) {
-//     return (a > b) ? a : b;
-// }
-
-/*
-    Dado un arreglo y su longitud, comprueba si el arreglo representa una
-    permutación o no, 0 si no es una permutación, 1 si lo es.
-*/
-char esPermutacion(u32 *arr, u32 N);
-
-/*
-    Devuelve el maximo color con el que fue coloreado alguno 
-    de los vértices para un grafo dado G
-*/
-u32 MaxColor(Grafo G);
 
 #endif
