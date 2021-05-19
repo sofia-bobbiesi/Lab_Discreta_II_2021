@@ -67,7 +67,7 @@ int main(int argc, char *argv[]) {
     printf(BGRN "El grafo G NO es bipartito\n\n");
 
     // Inciso 4-5
-    u32 superGreedyto = 0; //Contador de llamadas a Greedy
+    u32 superGreedyto = a+1+b+(3*c*d); //Contador de llamadas a Greedy
     OrdenNatural(G);
     u32 color = Greedy(G);
     u32 mejor_color_G = color;
@@ -82,7 +82,7 @@ int main(int argc, char *argv[]) {
             mejor_semilla = f + i;
         }
     }
-    superGreedyto += a + 1;
+
     // Si la mejor semilla no fue la última, vuelvo a ordenar
     if(mejor_semilla != (f + a - 1)) {
         AleatorizarVertices(G, mejor_semilla);
@@ -100,8 +100,7 @@ int main(int argc, char *argv[]) {
         printf("El coloreo fue de %u por bloques de colores\n", mejor_color_G);
     }
     //printf("El coloreo fue de %u para %u reordenes por bloques de colores\n", mejor_color_G, b);
-    superGreedyto += b;
-
+    
     // Inciso 7
     printf("\n");
     u32 mejor_color_H = mejor_color_G;
@@ -157,7 +156,7 @@ int main(int argc, char *argv[]) {
         mejor_color_H = mejor_color_G;
         mejor_color_W = mejor_color_G;
     }
-    superGreedyto += 3*c*d;
+    
     // Inciso 8
     printf(BMAG"\nEl último coloreo obtenido fue de %u colores\n", mejor_color_G);
     printf("Se realizaron %u coloreos con Greedy\n"reset, superGreedyto);
