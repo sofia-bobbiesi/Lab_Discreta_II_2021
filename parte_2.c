@@ -13,7 +13,7 @@ u32 Greedy(Grafo G){
     u32 k;
     u32 *colores = calloc(n_vertx, sizeof(u32));
     bool *colores_usados = calloc(Delta(G)+1, sizeof(bool)); // 0 es disponible, 1 es usado
-    // Decolarar los vértices asignándole UINT32_MAX
+    // Decolorar los vértices asignándole UINT32_MAX
     for (u32 i = 0; i < n_vertx; i++){ 
         colores[i] = UINT32_MAX;
     }
@@ -33,7 +33,13 @@ u32 Greedy(Grafo G){
         colores[v] = k;
         max_color = max(k, max_color);
         // Reseteo los colores usados para el próximo vértice
-        memset(colores_usados, 0, Delta(G)+1);
+        for (u32 w = 0; w < grado; w++) {
+           color = colores[OrdenVecino(w,v,G)];
+            if (color != UINT32_MAX) {
+                colores_usados[color] = 0;
+            }
+        }
+        
     }
     free(colores);
     free(colores_usados);
