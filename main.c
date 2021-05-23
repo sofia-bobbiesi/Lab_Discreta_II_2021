@@ -123,26 +123,24 @@ int main(int argc, char *argv[]) {
         Grafo H = CopiarGrafo(G);
         Grafo W = CopiarGrafo(G);
         for (int j = 0; j < d; ++j) {
-            // Estrategia A:
+            // Estrategia A, sobre grafo G:
             RandomizarPermutaciones(perm, mejor_color_G, f + j);
             if (!OrdenPorBloqueDeColores(G, perm)) {
                 fprintf(stderr, BRED "ERROR: Estrategia A: No se pudo ordenar por bloques\n" reset);
             }
             mejor_color_G = Greedy(G);
 
-            // Estrategia B:
+            // Estrategia B, sobre grafo H:
             MayorMenor(perm, mejor_color_H);
             if (!OrdenPorBloqueDeColores(H, perm)) {
                 fprintf(stderr, BRED "ERROR: Estrategia B: No se pudo ordenar por bloques\n" reset);
             }
             mejor_color_H = Greedy(H);
 
-            // Estrategia C:
+            // Estrategia C, sobre grafo W:
             u32 idx_rand = 0;
 
-            if (mejor_color_H != mejor_color_W) {
-                MayorMenor(perm, mejor_color_H);
-            }
+            MayorMenor(perm, mejor_color_W);
 
             for (u32 k = 0; k < mejor_color_W; ++k) {
                 idx_rand = rand() % e;
@@ -175,6 +173,8 @@ int main(int argc, char *argv[]) {
         DestruccionDelGrafo(W);
         mejor_color_H = mejor_color_G;
         mejor_color_W = mejor_color_G;
+
+        perm = realloc(perm, mejor_color_G*sizeof(u32));
     }
 
     // Inciso 8

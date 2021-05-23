@@ -154,7 +154,7 @@ char AleatorizarVertices(Grafo G, u32 R) {
     // Finalmente, se aleatoriza el orden de los vertices del grafo G.
     for (u32 i = 0u; i < n_vertx; ++i) {
         check = FijarOrden(i, G, orden_aleatorio[i]);
-        if (check == 1) {
+        if (FijarOrden(i, G, orden_aleatorio[i])) {
             fprintf(stderr, "ERROR: No se pudo asignar el orden\n");
             break;
         }
@@ -185,7 +185,7 @@ char esPermutacion(u32 *arr, u32 N) {
         hash[arr[i]]++;
         // Verifica que la frecuencia sea 1
         if (hash[arr[i]] != 1) {
-            fprintf(stderr, "ERROR: Color duplicado; %d\n", arr[i]);
+            fprintf(stderr, "ERROR: Color duplicado: %d\n", arr[i]);
             return 0;
         }
     }
@@ -255,11 +255,9 @@ char OrdenPorBloqueDeColores(Grafo G, u32 *perm) {
     }
     // Agrupo los vertices en el orden de los colores dados por perm
     u32 k = 0u;
-    char check = 0;
     for (u32 i = 0u; i < len_perm; ++i) {
         for (u32 j = 0u; j < freq[perm[i]]; ++j) {
-            check = FijarOrden(k, G, hash[perm[i]][j]);
-            if (check == 1) {
+            if (FijarOrden(k, G, hash[perm[i]][j])) {
                 fprintf(stderr, "ERROR: No se pudo asignar el orden\n");
                 break;
             }
