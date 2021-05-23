@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <time.h>
 
 #define BRED "\e[1;31m"
 #define BGRN "\e[1;32m"
@@ -32,6 +33,7 @@ void MayorMenor(u32* perm, u32 len){
 }
 
 int main(int argc, char *argv[]) {
+    clock_t begin = clock();
     // Inciso 1
     if(argc != 7){
         fprintf(stderr, BRED "ERROR: Formato inválido\n");
@@ -67,25 +69,33 @@ int main(int argc, char *argv[]) {
     printf(BGRN "El grafo G NO es bipartito\n\n");
 
     // Inciso 4-5
-    u32 superGreedyto = a+1+b+(3*c*d); //Contador de llamadas a Greedy
+    char check = 0;
     OrdenNatural(G);
     u32 color = Greedy(G);
+    u32 superGreedyto = 1+b+3*c*d; //Contador de llamadas a Greedy
     u32 mejor_color_G = color;
     printf(BBLU "El coloreo fue de %u colores para el orden natural\n\n"reset, color);
     int mejor_semilla = f;
     for (int i = 0; i < a; ++i) {
-        AleatorizarVertices(G, f+i);
+        check = AleatorizarVertices(G, f+i);
+        if (check) {
+            fprintf(stderr, BRED "ERROR: No se pudo aleatorizar\n"reset);
+            break;
+        }
         color = Greedy(G);
+        superGreedyto++;
         printf("El coloreo fue de %u por aleatorización de colores\n", color);
         if(color < mejor_color_G){
             mejor_color_G = color;
             mejor_semilla = f + i;
         }
     }
-
     // Si la mejor semilla no fue la última, vuelvo a ordenar
     if(mejor_semilla != (f + a - 1)) {
-        AleatorizarVertices(G, mejor_semilla);
+        check = AleatorizarVertices(G, mejor_semilla);
+        if (check) {
+            fprintf(stderr, BRED "ERROR: No se pudo aleatorizar\n"reset);
+        }
         mejor_color_G = Greedy(G);
         superGreedyto++;
     }
@@ -95,11 +105,14 @@ int main(int argc, char *argv[]) {
     u32 *perm = calloc(mejor_color_G, sizeof(u32));
     for (int i = 0; i < b; ++i) {
         RandomizarPermutaciones(perm, mejor_color_G, f+i);
-        OrdenPorBloqueDeColores(G, perm);
+        check = OrdenPorBloqueDeColores(G, perm);
+        if (!check) {
+            fprintf(stderr, BRED "ERROR: Perm NO es una permutación, no se pudo ordenar\n"reset);
+        }
         mejor_color_G = Greedy(G);
         printf("El coloreo fue de %u por bloques de colores\n", mejor_color_G);
     }
-    //printf("El coloreo fue de %u para %u reordenes por bloques de colores\n", mejor_color_G, b);
+    printf("El coloreo fue de %u para %u reordenes por bloques de colores\n", mejor_color_G, b);
     
     // Inciso 7
     printf("\n");
@@ -113,12 +126,18 @@ int main(int argc, char *argv[]) {
         for (int j = 0; j < d; ++j) {
             // Estrategia A:
             RandomizarPermutaciones(perm, mejor_color_G, f+j);
-            OrdenPorBloqueDeColores(G, perm);
+            check = OrdenPorBloqueDeColores(G, perm);
+            if (!check) {
+                fprintf(stderr, BRED "ERROR: Perm NO es una permutación, no se pudo ordenar\n"reset);
+            }
             mejor_color_G = Greedy(G);     
 
             // Estrategia B:
             MayorMenor(perm,mejor_color_H);
-            OrdenPorBloqueDeColores(H, perm);
+            check = OrdenPorBloqueDeColores(H, perm);
+            if (!check) {
+                fprintf(stderr, BRED "ERROR: Perm NO es una permutación, no se pudo ordenar\n"reset);
+            }
             mejor_color_H = Greedy(H);
 
             // Estrategia C:
@@ -134,11 +153,15 @@ int main(int argc, char *argv[]) {
                     swap(&perm[k], &perm[rand() % mejor_color_W]);
                 }
             }
-            OrdenPorBloqueDeColores(W, perm);
+            check = OrdenPorBloqueDeColores(W, perm);
+            if (!check) {
+                fprintf(stderr, BRED "ERROR: Perm NO es una permutación, no se pudo ordenar\n"reset);
+            }
             mejor_color_W = Greedy(W);
             
             printf("El coloreo obtenido fue de G: %u, H: %u, W: %u colores\n", mejor_color_G, mejor_color_H, mejor_color_W);
         }
+        printf(BMAG"\n★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★\n\n"reset);
         // Dejamos el grafo con el mejor coloreo en G, descartando los otros
         SuperColor = min(min(mejor_color_G, mejor_color_H), mejor_color_W);
         if (SuperColor == mejor_color_H) {
@@ -159,9 +182,13 @@ int main(int argc, char *argv[]) {
     
     // Inciso 8
     printf(BMAG"\nEl último coloreo obtenido fue de %u colores\n", mejor_color_G);
-    printf("Se realizaron %u coloreos con Greedy\n"reset, superGreedyto);
+    printf("Se realizaron %u coloreos con Greedy\n", superGreedyto);
 
     free(perm);
     DestruccionDelGrafo(G);
+
+    clock_t end = clock();
+    double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+    printf("El tiempo de corrida del programa fue de: %fs\n"reset, time_spent);
     return 0;
 }

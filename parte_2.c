@@ -10,9 +10,15 @@
 u32 Greedy(Grafo G){
     u32 color = 0, max_color = 0;
     u32 n_vertx = NumeroDeVertices(G);
-    u32 k;
+    u32 k = 0;
+    char check = 0;
     u32 *colores = calloc(n_vertx, sizeof(u32));
     bool *colores_usados = calloc(Delta(G)+1, sizeof(bool)); // 0 es disponible, 1 es usado
+    if (colores == NULL ||colores_usados == NULL) {
+        fprintf(stderr,"ERROR: No se pudo asignar memoria\n");
+        return UINT32_MAX;
+    }
+    
     // Decolorar los vértices asignándole UINT32_MAX
     for (u32 i = 0; i < n_vertx; i++){ 
         colores[i] = UINT32_MAX;
@@ -29,7 +35,11 @@ u32 Greedy(Grafo G){
         }
         // Busco el color mínimo que no haya sido asignado aún
         for(k = 0u; colores_usados[k] != 0; ++k);
-        FijarColor(k, v, G);
+        check = FijarColor(k, v, G);
+        if (check) {
+            fprintf(stderr,"ERROR: No se pudo asignar el color\n");
+            return UINT32_MAX;
+        }
         colores[v] = k;
         max_color = max(k, max_color);
         // Reseteo los colores usados para el próximo vértice
@@ -48,8 +58,12 @@ u32 Greedy(Grafo G){
 }
 
 static void BFS(Grafo G, u32 vertice){
+    char check;
     queue cola = newQueue(NumeroDeVertices(G));
-    FijarColor(0, vertice, G);
+    check = FijarColor(0, vertice, G);
+    if (check) {
+        fprintf(stderr,"ERROR: No se pudo asignar el color\n");
+    }
     enqueue(cola, vertice);
     while (!isEmptyQueue(cola)){
         u32 v = front(cola);
@@ -57,6 +71,9 @@ static void BFS(Grafo G, u32 vertice){
         for (u32 j = 0; j < Grado(v, G); j++) {
             if (ColorVecino(j, v, G) == UINT32_MAX) { 
                 FijarColor(1 - Color(v, G), OrdenVecino(j, v, G), G);
+                if (check) {
+                    fprintf(stderr,"ERROR: No se pudo asignar el color\n");
+                }
                 enqueue(cola, OrdenVecino(j, v, G));
             }
         }
@@ -77,9 +94,14 @@ char ChequeoColoreoPropio(Grafo G){
 
 char Bipartito(Grafo G){
     u32 n_vertx = NumeroDeVertices(G);
+    char check = 0;
     // Inicializa los colores en un color que no puede tomar
     for (u32 i = 0; i < n_vertx; i++) {
-	    FijarColor(UINT32_MAX, i, G);
+	    check = FijarColor(UINT32_MAX, i, G);
+        if (check) {
+            fprintf(stderr,"ERROR: No se pudo asignar el color\n");
+            return 0;
+        }
     }    
     for (u32 i = 0; i < n_vertx; i++) {
         if (Color(i, G) == UINT32_MAX) {
@@ -90,7 +112,11 @@ char Bipartito(Grafo G){
     // le asignamos un coloreo que se propio y retornamos 0.
     if (!ChequeoColoreoPropio(G)) {
         for (u32 i = 0; i < n_vertx; i++) {
-            FijarColor(i, i, G);
+            check = FijarColor(i, i, G);
+            if (check) {
+                fprintf(stderr,"ERROR: No se pudo asignar el color\n");
+                return 0;
+            }
         }
 	    return 0;
     }
@@ -107,6 +133,7 @@ char AleatorizarVertices(Grafo G,u32 R){
     */
     u32 *orden_aleatorio = calloc(n_vertx, sizeof(u32));
     if (orden_aleatorio == NULL){
+        fprintf(stderr,"ERROR: No se pudo asignar memoria\n");
         return 1;
     }
 
@@ -135,6 +162,7 @@ char AleatorizarVertices(Grafo G,u32 R){
     for (u32 i = 0u; i < n_vertx; ++i){
         check = FijarOrden(i,G,orden_aleatorio[i]);
         if (check == 1) {
+            fprintf(stderr,"ERROR: No se pudo asignar el orden\n");
             break;
         }
     }
@@ -143,29 +171,34 @@ char AleatorizarVertices(Grafo G,u32 R){
 }
 
 void OrdenNatural(Grafo G){
+    char check = 0;
     for (u32 i = 0u; i < NumeroDeVertices(G); ++i){
-	    FijarOrden(i, G, i);
+	    check = FijarOrden(i, G, i);
+        if (check == 1) {
+            fprintf(stderr,"ERROR: No se pudo asignar el orden\n");
+        }
     }
 }
 
 char esPermutacion(u32 *arr, u32 N) {
     u32 *hash = calloc(N, sizeof(u32));
-    u32 es_perm = 1;
+    if (hash == NULL) {
+        fprintf(stderr,"ERROR: No se pudo asignar memoria\n");
+        return 0;
+    }
     // Cuenta la frecuencia de colores
     for (u32 i = 0; i < N; ++i) {
         if (arr[i] >= N){
-            es_perm = 0;
-            break;
+            return 0;
         }
         hash[arr[i]]++;
         // Verifica que la frecuencia sea 1
         if (hash[arr[i]] != 1) {
-            es_perm = 0;
-            break;
+            return 0;
         }
     }
     free(hash);
-    return es_perm;
+    return 1;
 }
 
 u32 MaxColor(Grafo G){
@@ -186,10 +219,15 @@ char OrdenPorBloqueDeColores(Grafo G, u32 *perm) {
     if (!esPermutacion(perm, len_perm)) {
         return 0;
     }
-    // Conviene tener los vértices ordenados para luego orden por bloques
+    // Conviene tener los vértices ordenados para luego ordenar fácilmente
     OrdenNatural(G);
-    // Cuenta la frecuencia de colores de los vertices
+    
     u32 *freq = calloc(len_perm, sizeof(u32));
+    if (freq == NULL) {
+        fprintf(stderr,"ERROR: No se pudo asignar memoria\n");
+        return 0;
+    }
+    // Cuenta la frecuencia de colores de los vertices
     for (u32 i = 0u; i < n_vertx; ++i) {
         freq[Color(i,G)]++;
     }
@@ -197,9 +235,17 @@ char OrdenPorBloqueDeColores(Grafo G, u32 *perm) {
         Creo un collection de tamaño r * freq[i],(i entre 0 y r) donde se 
         guardarán las posiciones que tienen el color correspondiente a perm[i]
     */
-    u32 **hash = calloc(len_perm,sizeof(u32*)); 	
+    u32 **hash = calloc(len_perm,sizeof(u32*)); 
+    if (hash == NULL) {
+        fprintf(stderr,"ERROR: No se pudo asignar memoria\n");
+        return 0;
+    }	
 	for (u32 i = 0u; i < len_perm; ++i) {
 		hash[i] = calloc(freq[i],sizeof(u32));
+        if (hash[i] == NULL) {
+            fprintf(stderr,"ERROR: No se pudo asignar memoria\n");
+            return 0;
+        }
     }
     /*
         Reseto el arreglo para usarlo de consulta al llenar la collection
@@ -214,10 +260,15 @@ char OrdenPorBloqueDeColores(Grafo G, u32 *perm) {
         freq[color]++;
     }
     // Agrupo los vertices en el orden de los colores dados por perm
-    u32 k = 0;
+    u32 k = 0u;
+    char check = 0;
     for (u32 i = 0u; i < len_perm; ++i) {
         for (u32 j = 0u; j < freq[perm[i]]; ++j){
-            FijarOrden(k,G,hash[perm[i]][j]);
+            check = FijarOrden(k,G,hash[perm[i]][j]);
+            if (check == 1) {
+                fprintf(stderr,"ERROR: No se pudo asignar el orden\n");
+                break;
+            }   
             k++;
         }
     }
