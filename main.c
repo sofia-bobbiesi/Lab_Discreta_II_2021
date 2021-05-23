@@ -69,7 +69,6 @@ int main(int argc, char *argv[]) {
     printf(BGRN "El grafo G NO es bipartito\n\n");
 
     // Inciso 4-5
-    char check = 0;
     OrdenNatural(G);
     u32 color = Greedy(G);
     u32 superGreedyto = 1 + b + 3 * c * d; // Contador de llamadas a Greedy
@@ -78,8 +77,7 @@ int main(int argc, char *argv[]) {
            color);
     int mejor_semilla = f;
     for (int i = 0; i < a; ++i) {
-        check = AleatorizarVertices(G, f + i);
-        if (check) {
+        if (AleatorizarVertices(G, f + i)) {
             fprintf(stderr, BRED "ERROR: No se pudo aleatorizar\n" reset);
             break;
         }
@@ -93,8 +91,7 @@ int main(int argc, char *argv[]) {
     }
     // Si la mejor semilla no fue la última, vuelvo a ordenar
     if (mejor_semilla != (f + a - 1)) {
-        check = AleatorizarVertices(G, mejor_semilla);
-        if (check) {
+        if (AleatorizarVertices(G, mejor_semilla)) {
             fprintf(stderr, BRED "ERROR: No se pudo aleatorizar\n" reset);
         }
         mejor_color_G = Greedy(G);
@@ -108,10 +105,8 @@ int main(int argc, char *argv[]) {
     u32 *perm = calloc(mejor_color_G, sizeof(u32));
     for (int i = 0; i < b; ++i) {
         RandomizarPermutaciones(perm, mejor_color_G, f + i);
-        check = OrdenPorBloqueDeColores(G, perm);
-        if (!check) {
-            fprintf(stderr, BRED "ERROR: Perm NO es una permutación, no se "
-                                 "pudo ordenar\n" reset);
+        if (!OrdenPorBloqueDeColores(G, perm)) {
+            fprintf(stderr, BRED "ERROR: No se pudo ordenar por bloques\n" reset);
         }
         mejor_color_G = Greedy(G);
         printf("El coloreo fue de %u por bloques de colores\n", mejor_color_G);
@@ -130,19 +125,15 @@ int main(int argc, char *argv[]) {
         for (int j = 0; j < d; ++j) {
             // Estrategia A:
             RandomizarPermutaciones(perm, mejor_color_G, f + j);
-            check = OrdenPorBloqueDeColores(G, perm);
-            if (!check) {
-                fprintf(stderr, BRED "ERROR: Perm NO es una permutación, no se "
-                                     "pudo ordenar\n" reset);
+            if (!OrdenPorBloqueDeColores(G, perm)) {
+                fprintf(stderr, BRED "ERROR: Estrategia A: No se pudo ordenar por bloques\n" reset);
             }
             mejor_color_G = Greedy(G);
 
             // Estrategia B:
             MayorMenor(perm, mejor_color_H);
-            check = OrdenPorBloqueDeColores(H, perm);
-            if (!check) {
-                fprintf(stderr, BRED "ERROR: Perm NO es una permutación, no se "
-                                     "pudo ordenar\n" reset);
+            if (!OrdenPorBloqueDeColores(H, perm)) {
+                fprintf(stderr, BRED "ERROR: Estrategia B: No se pudo ordenar por bloques\n" reset);
             }
             mejor_color_H = Greedy(H);
 
@@ -159,10 +150,8 @@ int main(int argc, char *argv[]) {
                     swap(&perm[k], &perm[rand() % mejor_color_W]);
                 }
             }
-            check = OrdenPorBloqueDeColores(W, perm);
-            if (!check) {
-                fprintf(stderr, BRED "ERROR: Perm NO es una permutación, no se "
-                                     "pudo ordenar\n" reset);
+            if (!OrdenPorBloqueDeColores(W, perm)) {
+                fprintf(stderr, BRED "ERROR: Estrategia C: No se pudo ordenar por bloques\n" reset);
             }
             mejor_color_W = Greedy(W);
 

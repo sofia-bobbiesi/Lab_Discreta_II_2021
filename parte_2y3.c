@@ -11,7 +11,6 @@ u32 Greedy(Grafo G) {
     u32 color = 0, max_color = 0;
     u32 n_vertx = NumeroDeVertices(G);
     u32 k = 0;
-    char check = 0;
     u32 *colores = calloc(n_vertx, sizeof(u32));
     bool *colores_usados =
         calloc(Delta(G) + 1, sizeof(bool)); // 0 es disponible, 1 es usado
@@ -36,8 +35,7 @@ u32 Greedy(Grafo G) {
         }
         // Busco el color mínimo que no haya sido asignado aún
         for (k = 0u; colores_usados[k] != 0; ++k);
-        check = FijarColor(k, v, G);
-        if (check) {
+        if (FijarColor(k, v, G)) {
             fprintf(stderr, "ERROR: No se pudo asignar el color\n");
             return UINT32_MAX;
         }
@@ -58,10 +56,8 @@ u32 Greedy(Grafo G) {
 }
 
 static void BFS(Grafo G, u32 vertice) {
-    char check;
     queue cola = newQueue(NumeroDeVertices(G));
-    check = FijarColor(0, vertice, G);
-    if (check) {
+    if (FijarColor(0, vertice, G)) {
         fprintf(stderr, "ERROR: No se pudo asignar el color\n");
     }
     enqueue(cola, vertice);
@@ -70,8 +66,7 @@ static void BFS(Grafo G, u32 vertice) {
         dequeue(cola);
         for (u32 j = 0; j < Grado(v, G); j++) {
             if (ColorVecino(j, v, G) == UINT32_MAX) {
-                FijarColor(1 - Color(v, G), OrdenVecino(j, v, G), G);
-                if (check) {
+                if (FijarColor(1 - Color(v, G), OrdenVecino(j, v, G), G)) {
                     fprintf(stderr, "ERROR: No se pudo asignar el color\n");
                 }
                 enqueue(cola, OrdenVecino(j, v, G));
@@ -94,11 +89,9 @@ char ChequeoColoreoPropio(Grafo G) {
 
 char Bipartito(Grafo G) {
     u32 n_vertx = NumeroDeVertices(G);
-    char check = 0;
     // Inicializa los colores en un color que no puede tomar
     for (u32 i = 0; i < n_vertx; i++) {
-        check = FijarColor(UINT32_MAX, i, G);
-        if (check) {
+        if (FijarColor(UINT32_MAX, i, G)) {
             fprintf(stderr, "ERROR: No se pudo asignar el color\n");
             return 0;
         }
@@ -112,8 +105,7 @@ char Bipartito(Grafo G) {
     // le asignamos un coloreo que se propio y retornamos 0.
     if (!ChequeoColoreoPropio(G)) {
         for (u32 i = 0; i < n_vertx; i++) {
-            check = FijarColor(i, i, G);
-            if (check) {
+            if (FijarColor(i, i, G)) {
                 fprintf(stderr, "ERROR: No se pudo asignar el color\n");
                 return 0;
             }
@@ -172,10 +164,8 @@ char AleatorizarVertices(Grafo G, u32 R) {
 }
 
 void OrdenNatural(Grafo G) {
-    char check = 0;
     for (u32 i = 0u; i < NumeroDeVertices(G); ++i) {
-        check = FijarOrden(i, G, i);
-        if (check == 1) {
+        if (FijarOrden(i, G, i)) {
             fprintf(stderr, "ERROR: No se pudo asignar el orden\n");
         }
     }
@@ -195,6 +185,7 @@ char esPermutacion(u32 *arr, u32 N) {
         hash[arr[i]]++;
         // Verifica que la frecuencia sea 1
         if (hash[arr[i]] != 1) {
+            fprintf(stderr, "ERROR: Color duplicado; %d\n", arr[i]);
             return 0;
         }
     }
@@ -218,6 +209,8 @@ char OrdenPorBloqueDeColores(Grafo G, u32 *perm) {
     u32 len_perm = MaxColor(G) + 1;
     // Chequeo que para r colores exista una permutación
     if (!esPermutacion(perm, len_perm)) {
+        fprintf(stderr, "ERROR: Perm NO es una permutación, no se "
+                                     "pudo ordenar\n");
         return 0;
     }
     // Conviene tener los vértices ordenados para luego ordenar fácilmente
